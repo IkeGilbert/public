@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoBagZone.com & GoBagZone.net - For Sale</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font for a slightly more refined look */
+        body {
+            font-family: "Inter", sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 to-gray-700 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white bg-opacity-90 p-8 md:p-12 rounded-xl shadow-2xl text-center max-w-2xl w-full">
+        <!-- Main Website Title -->
+        <h1 class="text-4xl md:text-6xl font-extrabold text-gray-800 mb-4 tracking-tight">
+            GoBagZone.com
+        </h1>
+
+        <!-- For Sale Message -->
+        <p class="text-xl md:text-2xl text-gray-600 mb-6 leading-relaxed">
+            This premium domain name is <span class="font-bold text-red-600">FOR SALE!</span>
+        </p>
+
+        <!-- Pricing Options Section -->
+        <div class="mb-8 p-6 bg-gray-50 rounded-lg shadow-md">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4">Pricing Options:</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- GoBagZone.com Option -->
+                <div class="bg-white p-5 rounded-lg shadow-inner border border-gray-200">
+                    <p class="text-xl font-semibold text-gray-700 mb-2">GoBagZone.com</p>
+                    <p class="text-3xl font-bold text-green-700">$3,000 USD</p>
+                </div>
+                <!-- GoBagZone.net Option -->
+                <div class="bg-white p-5 rounded-lg shadow-inner border border-gray-200">
+                    <p class="text-xl font-semibold text-gray-700 mb-2">GoBagZone.net</p>
+                    <p class="text-3xl font-bold text-green-700">$1,500 USD</p>
+                </div>
+                <!-- Bundle Option -->
+                <div class="bg-blue-50 p-5 rounded-lg shadow-inner border border-blue-200">
+                    <p class="text-xl font-semibold text-blue-700 mb-2">Bundle Deal!</p>
+                    <p class="text-2xl font-semibold text-blue-600 mb-1">GoBagZone.com + GoBagZone.net</p>
+                    <p class="text-3xl font-bold text-blue-800">$4,000 USD</p>
+                    <p class="text-sm text-gray-500 mt-2">(Save $500!)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Offer Information -->
+        <p class="text-lg md:text-xl text-gray-700 mb-8">
+            Interested parties can also make an offer directly to the owner:
+        </p>
+
+        <!-- Owner Contact Information -->
+        <div class="bg-gray-100 p-6 rounded-lg shadow-inner inline-block mb-10">
+            <p class="text-2xl md:text-3xl font-semibold text-gray-900">
+                Ike Gilbert
+            </p>
+            <p class="text-lg md:text-xl text-gray-600">
+                (Owner)
+            </p>
+        </div>
+
+        <!-- Contact Form Section -->
+        <div class="mt-8 pt-8 border-t-2 border-gray-200">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
+                Make an Offer
+            </h2>
+            <!--
+                The 'mailto:' action will open the user's default email client.
+                Note: This method is simple but has limitations:
+                1. It relies on the user having an email client configured.
+                2. It doesn't send the email directly from the website; the user must click 'send' in their email client.
+                3. Form field values are appended to the email body, not as separate fields in the email client.
+                For a more robust solution that sends emails directly, a backend script (e.g., PHP, Node.js, Python)
+                would be required, which is beyond the scope of a pure HTML/CSS frontend.
+            -->
+            <form action="mailto:email2ike@gmail.com?subject=DOMAIN OFFER GoBagZone.com" method="post" enctype="text/plain" class="max-w-lg mx-auto text-left">
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700 text-sm font-bold mb-2">
+                        Your Email Address:
+                    </label>
+                    <input type="email" id="email" name="Email" placeholder="your.email@example.com"
+                           class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="phone" class="block text-gray-700 text-sm font-bold mb-2">
+                        Your Phone Number (Optional):
+                    </label>
+                    <input type="tel" id="phone" name="Phone" placeholder="(123) 456-7890"
+                           class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+
+                <div class="mb-6">
+                    <label for="offer" class="block text-gray-700 text-sm font-bold mb-2">
+                        Your Offer Amount (USD):
+                    </label>
+                    <input type="number" id="offer" name="Offer" placeholder="e.g., 2500" min="1"
+                           class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           required>
+                </div>
+
+                <div class="mb-6">
+                    <label for="message" class="block text-gray-700 text-sm font-bold mb-2">
+                        Which domain(s) are you interested in?
+                    </label>
+                    <textarea id="message" name="Message" rows="4" placeholder="e.g., Interested in the GoBagZone.com & GoBagZone.net bundle."
+                              class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                </div>
+
+                <div class="flex items-center justify-center">
+                    <button type="submit"
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:scale-105 shadow-lg">
+                        Submit Offer
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Optional: Footer or additional info -->
+        <p class="mt-10 text-sm text-gray-500">
+            Secure your perfect domain for your needs today!
+        </p>
+    </div>
+</body>
+</html>
