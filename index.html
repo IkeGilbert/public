@@ -1,0 +1,292 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GP Audit Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .logo {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 800px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        input {
+            width: 100%;
+            border: none;
+            padding: 5px;
+        }
+        .total {
+            font-weight: bold;
+            background-color: #e6e6e6;
+        }
+        .blended-gp {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <img src="path/to/birdseye_logo.png" alt="Birdseye Construction Management Logo" style="max-width: 100%;">
+    </div>
+
+    <h1>GP Audit Tool</h1>
+    <label for="target-gp">Enter Target GP%:</label>
+    <input type="number" id="target-gp" step="0.01" placeholder="Enter Target GP%" oninput="updateGMInputs()">
+    <br><br>
+
+    <!-- Cost Table -->
+    <table id="cost-table">
+        <thead>
+            <tr>
+                <th>COST</th>
+                <th>GM %</th>
+                <th>SELL</th>
+                <th>MARKUP</th>
+                <th>MU%</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="number" class="cost" step="0.01" oninput="calculateRow(this)"></td>
+                <td><input type="number" class="gm" step="0.01" oninput="calculateRow(this)"></td>
+                <td><input type="number" class="sell" step="0.01" oninput="calculateRow(this)"></td>
+                <td class="markup"></td>
+                <td class="mu-percent"></td>
+            </tr>
+            <tr>
+                <td><input type="number" class="cost" step="0.01" oninput="calculateRow(this)"></td>
+                <td><input type="number" class="gm" step="0.01" oninput="calculateRow(this)"></td>
+                <td><input type="number" class="sell" step="0.01" oninput="calculateRow(this)"></td>
+                <td class="markup"></td>
+                <td class="mu-percent"></td>
+            </tr>
+            <tr>
+                <td><input type="number" class="cost" step="0.01" oninput="calculateRow(this)"></td>
+                <td><input type="number" class="gm" step="0.01" oninput="calculateRow(this)"></td>
+                <td><input type="number" class="sell" step="0.01" oninput="calculateRow(this)"></td>
+                <td class="markup"></td>
+                <td class="mu-percent"></td>
+            </tr>
+            <tr class="total">
+                <td id="total-cost">0</td>
+                <td></td>
+                <td id="total-sell">0</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br><br>
+
+    <!-- Sell Table -->
+    <table id="sell-table">
+        <thead>
+            <tr>
+                <th>SELL</th>
+                <th>COST</th>
+                <th>MARKUP</th>
+                <th>PROFIT GROSS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="number" class="sell2" step="0.01" oninput="calculateSellRow(this)"></td>
+                <td><input type="number" class="cost2" step="0.01" oninput="calculateSellRow(this)"></td>
+                <td class="markup2"></td>
+                <td class="profit-gross"></td>
+            </tr>
+            <tr>
+                <td><input type="number" class="sell2" step="0.01" oninput="calculateSellRow(this)"></td>
+                <td><input type="number" class="cost2" step="0.01" oninput="calculateSellRow(this)"></td>
+                <td class="markup2"></td>
+                <td class="profit-gross"></td>
+            </tr>
+            <tr>
+                <td><input type="number" class="sell2" step="0.01" oninput="calculateSellRow(this)"></td>
+                <td><input type="number" class="cost2" step="0.01" oninput="calculateSellRow(this)"></td>
+                <td class="markup2"></td>
+                <td class="profit-gross"></td>
+            </tr>
+            <tr class="total">
+                <td id="total-sell2">0</td>
+                <td id="total-cost2">0</td>
+                <td></td>
+                <td id="total-profit-gross">0</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="blended-gp">
+        BLENDED GP%: <span id="blended-gp">0</span>
+    </div>
+
+    <script>
+        function updateGMInputs() {
+            const targetGP = parseFloat(document.getElementById('target-gp').value) || 0;
+            document.querySelectorAll('#cost-table .gm').forEach(gmInput => {
+                gmInput.value = targetGP.toFixed(2);
+                calculateRow(gmInput);
+            });
+        }
+
+        function calculateRow(element) {
+            const row = element.parentElement.parentElement;
+            const costInput = row.querySelector('.cost');
+            const gmInput = row.querySelector('.gm');
+            const sellInput = row.querySelector('.sell');
+            const markupCell = row.querySelector('.markup');
+            const muPercentCell = row.querySelector('.mu-percent');
+
+            let cost = parseFloat(costInput.value) || 0;
+            let gm = parseFloat(gmInput.value) || 0;
+            let sell = parseFloat(sellInput.value) || 0;
+
+            if (element.classList.contains('cost') && cost !== 0) {
+                // Calculate SELL from COST and GM%
+                sell = cost / (1 - gm / 100);
+                sellInput.value = sell.toFixed(2);
+            } else if (element.classList.contains('gm') && gm !== 0) {
+                // Calculate SELL from COST and GM%
+                sell = cost / (1 - gm / 100);
+                sellInput.value = sell.toFixed(2);
+            } else if (element.classList.contains('sell') && sell !== 0) {
+                // Calculate GM% from COST and SELL
+                gm = ((sell - cost) / sell) * 100;
+                gmInput.value = gm.toFixed(2);
+            }
+
+            // Calculate MARKUP and MU%
+            const markup = sell - cost;
+            const muPercent = cost !== 0 ? (markup / cost) * 100 : 0;
+
+            markupCell.textContent = markup.toFixed(2);
+            muPercentCell.textContent = muPercent.toFixed(2) + '%';
+
+            calculateTotals();
+        }
+
+        function calculateSellRow(element) {
+            const row = element.parentElement.parentElement;
+            const sellInput = row.querySelector('.sell2');
+            const costInput = row.querySelector('.cost2');
+            const markupCell = row.querySelector('.markup2');
+            const profitGrossCell = row.querySelector('.profit-gross');
+
+            let sell = parseFloat(sellInput.value) || 0;
+            let cost = parseFloat(costInput.value) || 0;
+
+            // Calculate MARKUP
+            const markup = sell - cost;
+            markupCell.textContent = markup.toFixed(2);
+
+            // Calculate PROFIT GROSS (GM%)
+            const profitGross = sell !== 0 ? (sell - cost) / sell : 0;
+            profitGrossCell.textContent = profitGross.toFixed(6);
+
+            calculateSellTotals();
+        }
+
+        function calculateTotals() {
+            let totalCost = 0;
+            let totalSell = 0;
+
+            document.querySelectorAll('#cost-table .cost').forEach(input => {
+                totalCost += parseFloat(input.value) || 0;
+            });
+            document.querySelectorAll('#cost-table .sell').forEach(input => {
+                totalSell += parseFloat(input.value) || 0;
+            });
+
+            document.getElementById('total-cost').textContent = totalCost.toFixed(2);
+            document.getElementById('total-sell').textContent = totalSell.toFixed(2);
+
+            calculateBlendedGP();
+        }
+
+        function calculateSellTotals() {
+            let totalSell = 0;
+            let totalCost = 0;
+            let totalProfitGross = 0;
+
+            document.querySelectorAll('#sell-table .sell2').forEach(input => {
+                totalSell += parseFloat(input.value) || 0;
+            });
+            document.querySelectorAll('#sell-table .cost2').forEach(input => {
+                totalCost += parseFloat(input.value) || 0;
+            });
+
+            totalProfitGross = totalSell !== 0 ? (totalSell - totalCost) / totalSell : 0;
+
+            document.getElementById('total-sell2').textContent = totalSell.toFixed(2);
+            document.getElementById('total-cost2').textContent = totalCost.toFixed(2);
+            document.getElementById('total-profit-gross').textContent = totalProfitGross.toFixed(6);
+
+            calculateBlendedGP();
+        }
+
+        function calculateBlendedGP() {
+            const totalSell = parseFloat(document.getElementById('total-sell2').textContent) || 0;
+            const totalCost = parseFloat(document.getElementById('total-cost2').textContent) || 0;
+            const blendedGP = totalSell !== 0 ? ((totalSell - totalCost) / totalSell) : 0;
+            document.getElementById('blended-gp').textContent = blendedGP.toFixed(6);
+        }
+    </script>
+</body>
+</html>
