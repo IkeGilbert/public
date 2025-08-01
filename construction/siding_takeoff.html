@@ -1,69 +1,135 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Siding Takeoff Tool</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 10px; }
-        .sheet { margin-bottom: 20px; }
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        tr:nth-child(even) { background-color: #f2f2f2; }
-        input { width: 100%; box-sizing: border-box; padding: 4px; }
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            background-color: #f9f9f9; 
+        }
+        .sheet { 
+            margin: 15px; 
+            max-width: 100%; 
+            overflow-x: auto; 
+        }
+        .header-container { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 20px; 
+        }
+        .header-container h2 { 
+            margin: 0; 
+            font-size: 1.5em; 
+        }
+        .header-container a { 
+            text-decoration: none; 
+            padding: 10px 20px; 
+            background-color: #007BFF; 
+            color: white; 
+            border-radius: 5px; 
+            font-size: 0.9em; 
+            transition: background-color 0.3s; 
+        }
+        .header-container a:hover { 
+            background-color: #0056b3; 
+        }
+        table { 
+            border-collapse: collapse; 
+            width: 100%; 
+            border: 1px solid #000; 
+            background-color: #fff; 
+        }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 10px; 
+            text-align: left; 
+        }
+        tr:nth-child(even) { 
+            background-color: #f2f2f2; 
+        }
+        input { 
+            width: 100%; 
+            box-sizing: border-box; 
+            padding: 6px; 
+            border: 1px solid #ccc; 
+            border-radius: 3px; 
+            font-size: 0.9em; 
+        }
         @media screen and (max-width: 600px) {
-            table { border: 0; }
-            table caption { font-size: 1.3em; }
-            table thead { border: none; clip: rect(0 0 0 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; }
-            table tr { border-bottom: 3px solid #ddd; display: block; margin-bottom: .625em; }
-            table td { border-bottom: 1px solid #ddd; display: block; font-size: .8em; text-align: right; }
-            table td::before { content: attr(data-label); float: left; font-weight: bold; text-transform: uppercase; }
-            table td:last-child { border-bottom: 0; }
+            .sheet { 
+                margin: 10px; 
+                padding: 10px; 
+            }
+            .header-container { 
+                flex-direction: column; 
+                align-items: flex-start; 
+            }
+            .header-container h2 { 
+                font-size: 1.3em; 
+            }
+            .header-container a { 
+                margin-top: 10px; 
+                width: 100%; 
+                text-align: center; 
+                padding: 12px; 
+            }
+            table { 
+                border: 0; 
+            }
+            table caption { 
+                font-size: 1.2em; 
+            }
+            table thead { 
+                border: none; 
+                clip: rect(0 0 0 0); 
+                height: 1px; 
+                margin: -1px; 
+                overflow: hidden; 
+                padding: 0; 
+                position: absolute; 
+                width: 1px; 
+            }
+            table tr { 
+                border-bottom: 2px solid #ddd; 
+                display: block; 
+                margin-bottom: 0.8em; 
+                background-color: #fff; 
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
+            }
+            table td { 
+                border-bottom: 1px solid #ddd; 
+                display: block; 
+                font-size: 0.85em; 
+                text-align: right; 
+                padding: 8px 10px; 
+            }
+            table td::before { 
+                content: attr(data-label); 
+                float: left; 
+                font-weight: bold; 
+                text-transform: uppercase; 
+                color: #333; 
+            }
+            table td:last-child { 
+                border-bottom: 0; 
+            }
+            input { 
+                font-size: 0.85em; 
+                padding: 8px; 
+            }
         }
     </style>
 </head>
 <body>
 <div class="sheet">
-    <h2>SIDING TAKEOFFS</h2>
+    <div class="header-container">
+        <h2>SIDING TAKEOFFS</h2>
+        <a href="https://ikegilbert.github.io/public/construction/siding_takeoff.html">ConstructionGods.com</a>
+    </div>
     <table id="sidingTable">
         <tbody>
             <tr>
