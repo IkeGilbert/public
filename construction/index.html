@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -136,37 +97,8 @@
     <section id="contact" class="bg-gray-100 py-8 sm:py-16" style="background-image: url('https://source.unsplash.com/random/1600x900/?construction')">
         <div class="container mx-auto px-4">
             <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Contact Us</h2>
-            <div class="max-w-md sm:max-w-lg mx-auto">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <div class="space-y-4">
-                        <div>
-                            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                            <input type="text" id="name" name="name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Your Name">
-                        </div>
-                        <div>
-                            <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Your Phone Number">
-                        </div>
-                        <div>
-                            <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                            <textarea id="description" name="description" rows="4" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Describe your needs"></textarea>
-                        </div>
-                        <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
-                            <input type="email" id="email" name="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Your Email Address">
-                        </div>
-                        <div>
-                            <label for="contact-type" class="block text-sm font-medium text-gray-700">Preferred Contact Type</label>
-                            <select id="contact-type" name="contact-type" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                                <option value="phone">Phone Call</option>
-                                <option value="email">Email</option>
-                            </select>
-                        </div>
-                        <div>
-                            <a id="submit-btn" href="#" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded text-center focus:outline-none focus:ring-2 focus:ring-blue-500">Submit</a>
-                        </div>
-                    </div>
-                </div>
+            <div class="max-w-md sm:max-w-lg mx-auto flex justify-center items-center min-h-[600px]">
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdcK_0HVW6gBmDky0w5ucJJv0DjVqogEfawl7fK12TnbNA0-w/viewform?embedded=true" width="640" height="1112" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
             </div>
         </div>
     </section>
@@ -178,30 +110,13 @@
         </div>
     </footer>
 
-    <!-- JavaScript for Mobile Menu Toggle and Mailto Submission -->
+    <!-- JavaScript for Mobile Menu Toggle -->
     <script>
         // Mobile Menu Toggle
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         mobileMenuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
-        });
-
-        // Mailto Submission
-        const submitBtn = document.getElementById('submit-btn');
-        submitBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-            const description = document.getElementById('description').value;
-            const email = document.getElementById('email').value;
-            const contactType = document.getElementById('contact-type').value;
-            const subject = encodeURIComponent('Contact Form Submission from ConstructionGods.com');
-            const body = encodeURIComponent(
-                `Name: ${name}\nPhone Number: ${phone}\nDescription: ${description}\nEmail Address: ${email}\nPreferred Contact Type: ${contactType}`
-            );
-            submitBtn.href = `mailto:constructiongods.com@gmail.com?subject=${subject}&body=${body}`;
-            window.location.href = submitBtn.href;
         });
     </script>
 </body>
