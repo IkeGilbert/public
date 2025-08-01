@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GP Audit Tool</title>
+    <title>Gross Profit / Markup Sales Calculator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -47,14 +47,36 @@
             max-width: 800px; /* Matches table width */
             text-align: left;
         }
+        .link-section {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #333;
+            max-width: 800px;
+            text-align: left;
+        }
+        .link-wrapper {
+            display: flex;
+            gap: 10px; /* Space between links */
+            align-items: flex-start;
+        }
+        .link-item {
+            display: inline-block;
+        }
+        .link-item-text {
+            text-align: center;
+            font-size: 12px;
+            margin-bottom: 5px;
+            max-width: 230px; /* Matches image width */
+            word-wrap: break-word; /* Ensures text wraps within the width */
+        }
     </style>
 </head>
 <body>
-    <h1>GP Audit Tool</h1>
+    <h1>Gross Profit / Markup Sales Calculator</h1>
     <label for="target-gp">Enter Target GP%:</label>
     <input type="number" id="target-gp" class="target-gp" step="0.01" placeholder="Enter Target GP%" oninput="updateGMInputs()">
     <br>
-    <a href="https://ikegilbert.github.io/public/gp_audit.instructions.html" target="_blank" onclick="window.open(this.href, 'popup', 'width=600,height=500'); return false;">Instructions</a>
+    <a href="https://ikegilbert.github.io/public/construction/gp_audit.instructions.html" target="_blank" onclick="window.open(this.href, 'popup', 'width=900,height=800'); return false;">Instructions</a>
     <br><br>
 
     <!-- Cost Table -->
@@ -145,7 +167,26 @@
     </div>
 
     <div class="footer-text">
-        This online tool is designed to help small businesses and contractors determine the appropriate markup to resell goods and services. In order to make the desired profits, use these steps to plan your estimates or sales quickly.
+        This online tool is designed to help small businesses and contractors determine the appropriate markup to resell goods and services. In order to calculate the markup needed to achieve the desired profits, simply enter the data starting in the top tool "Target Gross Profit %" box, then indicate the cost of the item or service so that the tool can calculate your markup amount and markup percentage.
+        <br><br>
+        The bottom tool allows you to enter the cost and sell prices for multiple items and then provides the markup information and blends the gross profit for up to 3 different goods or services sold together.
+    </div>
+
+    <div class="link-section">
+        #affiliate_links
+        <br>
+        <strong>Recommended Contractor and Sales Books</strong>
+        <br>
+        <div class="link-wrapper">
+            <div class="link-item">
+                <div class="link-item-text">Consultant & Independent Contractor Agreements</div>
+                <a href="https://amzn.to/4782vcG" target="_blank"><img src="https://m.media-amazon.com/images/I/81SlKoEVDKL._SY385_.jpg" alt="Consultant & Independent Contractor Agreements Book" style="width: 230px; height: 230px;"></a>
+            </div>
+            <div class="link-item">
+                <div class="link-item-text">Profitable Sales, A Contractor's Guide Paperback – June 7, 2007 by Michael C. Stone (Author)</div>
+                <a href="https://amzn.to/46CbDGs" target="_blank"><img src="https://m.media-amazon.com/images/I/61qGoD42onL._SY385_.jpg" alt="Profitable Sales, A Contractor's Guide Book" style="width: 230px; height: 230px;"></a>
+            </div>
+        </div>
     </div>
 
     <script>
