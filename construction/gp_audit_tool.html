@@ -10,6 +10,30 @@
             margin: 10px;
             padding: 0;
         }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 28px;
+            margin: 0;
+        }
+        .header-button {
+            background-color: #4CAF50; /* Green background */
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .header-button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
         table {
             border-collapse: collapse;
             width: 100%;
@@ -70,22 +94,26 @@
         .link-item {
             display: inline-block;
         }
-        .link-item-text {
-            text-align: center;
-            font-size: 12px;
-            margin-bottom: 5px;
-            max-width: 230px; /* Matches image width */
-            word-wrap: break-word; /* Ensures text wraps within the width */
-        }
 
         /* Mobile-specific styles */
         @media (max-width: 768px) {
             body {
                 margin: 5px;
             }
+            .header-container {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
             h1 {
                 font-size: 24px;
                 margin-bottom: 10px;
+            }
+            .header-button {
+                width: 100%;
+                margin-top: 10px;
+                font-size: 14px;
+                padding: 8px 16px;
             }
             table {
                 font-size: 12px;
@@ -115,10 +143,6 @@
                 width: 100%;
                 text-align: center;
             }
-            .link-item-text {
-                font-size: 10px;
-                max-width: 100%;
-            }
             img {
                 width: 100%;
                 max-width: 230px;
@@ -132,7 +156,10 @@
     </style>
 </head>
 <body>
-    <h1>Gross Profit / Markup Sales Calculator</h1>
+    <div class="header-container">
+        <h1>Gross Profit / Markup Sales Calculator</h1>
+        <a href="https://ikegilbert.github.io/public/construction/index.html" class="header-button">ConstructionGods.com</a>
+    </div>
     <label for="target-gp">Enter Target GP%:</label>
     <input type="number" id="target-gp" class="target-gp" step="0.01" placeholder="Enter Target GP%" oninput="updateGMInputs()">
     <br>
@@ -239,12 +266,13 @@
         <br><br>
         <div class="link-wrapper">
             <div class="link-item">
-                <div class="link-item-text">Consultant & Independent Contractor Agreements</div>
                 <a href="https://amzn.to/4782vcG" target="_blank"><img src="https://m.media-amazon.com/images/I/81SlKoEVDKL._SY385_.jpg" alt="Consultant & Independent Contractor Agreements Book" style="width: 230px; height: 230px;"></a>
             </div>
             <div class="link-item">
-                <div class="link-item-text">Profitable Sales, A Contractor's Guide Paperback – June 7, 2007 by Michael C. Stone (Author)</div>
                 <a href="https://amzn.to/46CbDGs" target="_blank"><img src="https://m.media-amazon.com/images/I/61qGoD42onL._SY385_.jpg" alt="Profitable Sales, A Contractor's Guide Book" style="width: 230px; height: 230px;"></a>
+            </div>
+            <div class="link-item">
+                <a href="https://amzn.to/40JkySO" target="_blank"><img src="https://m.media-amazon.com/images/I/619rW30yK0L._SY466_.jpg" alt="The Contractor Profit Blueprint Book" style="width: 230px; height: 230px;"></a>
             </div>
         </div>
     </div>
