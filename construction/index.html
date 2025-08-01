@@ -1,0 +1,208 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construction Gods - Premier Construction Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="font-sans bg-gray-200">
+    <!-- Header -->
+    <header class="bg-blue-900 text-white py-4 sticky top-0 z-10">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <h1 class="text-xl sm:text-2xl font-bold">ConstructionGods.com</h1>
+            <nav class="hidden md:block">
+                <ul class="flex space-x-6">
+                    <li><a href="#home" class="hover:text-blue-300">Home</a></li>
+                    <li><a href="#focus" class="hover:text-blue-300">Focus</a></li>
+                    <li><a href="#tools" class="hover:text-blue-300">Tools</a></li>
+                    <li><a href="#about" class="hover:text-blue-300">About</a></li>
+                    <li><a href="#contact" class="hover:text-blue-300">Contact</a></li>
+                </ul>
+            </nav>
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <nav id="mobile-menu" class="hidden md:hidden bg-blue-800 text-white px-4 py-2">
+            <ul class="flex flex-col space-y-2">
+                <li><a href="#home" class="hover:text-blue-300">Home</a></li>
+                <li><a href="#focus" class="hover:text-blue-300">Focus</a></li>
+                <li><a href="#tools" class="hover:text-blue-300">Tools</a></li>
+                <li><a href="#about" class="hover:text-blue-300">About</a></li>
+                <li><a href="#contact" class="hover:text-blue-300">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="bg-gray-100 h-[60vh] sm:h-screen flex items-center" style="background-image: url('https://source.unsplash.com/random/1600x900/?construction')">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-gray-800">Professional Consultation Services</h2>
+            <p class="text-xs sm:text-sm md:text-base mb-6 text-gray-800">Guidance and resources for commercial / residential builders, general contractors, inspectors, home owners and investors</p>
+            <a href="#contact" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded text-sm sm:text-base">Request Information</a>
+        </div>
+    </section>
+
+    <!-- Focus Section -->
+    <section id="focus" class="py-8 sm:py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Our Focus : Supporting</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-2 text-center">Residential Construction</h3>
+                </div>
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-2 text-center">Commercial Projects</h3>
+                </div>
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-2 text-center">Remodeling & Repairs</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section id="tools" class="py-8 sm:py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Tools</h2>
+            <div class="grid grid-cols-1 gap-6 sm:gap-8">
+                <div class="bg-white p-2 sm:p-3 rounded-lg shadow-md max-w-[60%] mx-auto">
+                    <a href="https://ikegilbert.github.io/public/construction/gp_audit_tool.html" target="_blank" class="text-lg sm:text-xl font-semibold mb-2 text-center hover:text-blue-600">Gross Profit / Markup Calculator</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="bg-gray-100 py-8 sm:py-16" style="background-image: url('https://source.unsplash.com/random/1600x900/?construction')">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">About Us</h2>
+            <p class="text-sm sm:text-lg text-left max-w-xl sm:max-w-2xl mx-auto">ConstructionGods.com is your trusted source for construction information and field tools. Owner Ike Gilbert has over 35 years of experience delivering top-tier multi-state projects. Our unique and proven skillsets include project planning, project and vendor management, scope of work definition, national pricing strategy for materials and labor, new home inspection, data audits, reporting and construction budgets. Learn how to leverage cutting edge technologies for your construction business needs.</p>
+            <div class="flex justify-center mt-6">
+                <a href="https://www.linkedin.com/in/ikegilbert" target="_blank">
+                    <div class="aspect-square max-w-xs">
+                        <img src="https://github.com/IkeGilbert/public/blob/main/construction/ike_linkedin.png?raw=true" alt="Ike Gilbert LinkedIn Profile" class="max-w-full h-auto">
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="bg-gray-100 py-8 sm:py-16" style="background-image: url('https://source.unsplash.com/random/1600x900/?construction')">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Contact Us</h2>
+            <div class="max-w-md sm:max-w-lg mx-auto">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                            <input type="text" id="name" name="name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Your Name">
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Your Phone Number">
+                        </div>
+                        <div>
+                            <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                            <textarea id="description" name="description" rows="4" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Describe your needs"></textarea>
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                            <input type="email" id="email" name="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Your Email Address">
+                        </div>
+                        <div>
+                            <label for="contact-type" class="block text-sm font-medium text-gray-700">Preferred Contact Type</label>
+                            <select id="contact-type" name="contact-type" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <option value="phone">Phone Call</option>
+                                <option value="email">Email</option>
+                            </select>
+                        </div>
+                        <div>
+                            <a id="submit-btn" href="#" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded text-center focus:outline-none focus:ring-2 focus:ring-blue-500">Submit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-blue-900 text-white py-4">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-sm sm:text-base">&copy; 2025 Construction Gods. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Mobile Menu Toggle and Mailto Submission -->
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Mailto Submission
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const description = document.getElementById('description').value;
+            const email = document.getElementById('email').value;
+            const contactType = document.getElementById('contact-type').value;
+            const subject = encodeURIComponent('Contact Form Submission from ConstructionGods.com');
+            const body = encodeURIComponent(
+                `Name: ${name}\nPhone Number: ${phone}\nDescription: ${description}\nEmail Address: ${email}\nPreferred Contact Type: ${contactType}`
+            );
+            submitBtn.href = `mailto:constructiongods.com@gmail.com?subject=${subject}&body=${body}`;
+            window.location.href = submitBtn.href;
+        });
+    </script>
+</body>
+</html>
