@@ -1,0 +1,301 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siding Takeoff Tool</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 10px; }
+        .sheet { margin-bottom: 20px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        input { width: 100%; box-sizing: border-box; padding: 4px; }
+        @media screen and (max-width: 600px) {
+            table { border: 0; }
+            table caption { font-size: 1.3em; }
+            table thead { border: none; clip: rect(0 0 0 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; }
+            table tr { border-bottom: 3px solid #ddd; display: block; margin-bottom: .625em; }
+            table td { border-bottom: 1px solid #ddd; display: block; font-size: .8em; text-align: right; }
+            table td::before { content: attr(data-label); float: left; font-weight: bold; text-transform: uppercase; }
+            table td:last-child { border-bottom: 0; }
+        }
+    </style>
+</head>
+<body>
+<div class="sheet">
+    <h2>SIDING TAKEOFFS</h2>
+    <table id="sidingTable">
+        <tbody>
+            <tr>
+                <td data-label="SIDING">SIDING</td>
+                <td data-label="Floorplan SqFt">Floorplan SqFt</td>
+                <td data-label="Input"><input type="number" id="floorplanInput" min="0" style="background-color: #FFFFE0;"></td>
+                <td data-label="Sqrt Floorplan" id="sqrtFloorplan">0</td>
+                <td data-label="AVG WALL LNFT">◄ AVG WALL LNFT</td>
+                <td data-label=""></td>
+                <td data-label=""></td>
+                <td data-label=""></td>
+            </tr>
+            <tr>
+                <td data-label="LOCATION">LOCATION</td>
+                <td data-label="LENGTH">LENGTH</td>
+                <td data-label="TOP PLATE (H)">TOP PLATE (H)</td>
+                <td data-label="GABLE (H)">GABLE (H)</td>
+                <td data-label="GABLE (W)">GABLE (W)</td>
+                <td data-label="FACTOR">FACTOR</td>
+                <td data-label=""></td>
+                <td data-label=""></td>
+            </tr>
+            <tr>
+                <td data-label="LOCATION">FRONT</td>
+                <td data-label="LENGTH"><input type="number" id="frontLength" oninput="calculate()" min="0"></td>
+                <td data-label="TOP PLATE (H)"><input type="number" id="frontTopPlate" oninput="calculate()" min="0"></td>
+                <td data-label="GABLE (H)"><input type="number" id="frontGableH" oninput="calculate()" min="0"></td>
+                <td data-label="GABLE (W)"><input type="number" id="frontGableW" oninput="calculate()" min="0"></td>
+                <td data-label="FACTOR" id="frontFactor">0</td>
+                <td data-label=""></td>
+                <td data-label=""></td>
+            </tr>
+            <tr>
+                <td data-label="LOCATION">LEFT</td>
+                <td data-label="LENGTH"><input type="number" id="leftLength" oninput="calculate()" min="0"></td>
+                <td data-label="TOP PLATE (H)"><input type="number" id="leftTopPlate" oninput="calculate()" min="0"></td>
+                <td data-label="GABLE (H)"><input type="number" id="leftGableH" oninput="calculate()" min="0"></td>
+                <td data-label="GABLE (W)"><input type="number" id="leftGableW" oninput="calculate()" min="0"></td>
+                <td data-label="FACTOR" id="leftFactor">0</td>
+                <td data-label=""></td>
+                <td data-label=""></td>
+            </tr>
+            <tr>
+                <td data-label="LOCATION">REAR</td>
+                <td data-label="LENGTH"><input type="number" id="rearLength" oninput="calculate()" min="0"></td>
+                <td data-label="TOP PLATE (H)"><input type="number" id="rearTopPlate" oninput="calculate()" min="0"></td>
+                <td data-label="GABLE (H)"><input type="number" id="rearGableH" oninput="calculate()" min="0"></td>
+                <td data-label="GABLE (W)"><input type="number" id="rearGableW" oninput="calculate()" min="0"></td>
+                <td data-label="FACTOR" id="rearFactor">0</td>
+                <td data-label=""></td>
+                <td data-label=""></td>
+            </tr>
+            <tr>
+                <td data-label="LOCATION">RIGHT</td>
+                <td data-label="LENGTH"><input type="number" id="rightLength" oninput="calculate()" min="0"></td>
+                <td data-label="TOP PLATE (H)"><input type="number" id="rightTopPlate" oninput="calculate()" min="0"></td>
+                <td data-label="GABLE (H)"><input type="number" id="rightGableH" oninput="calculate()" min="0"></td>
+                <td data-label="GABLE (W)"><input type="number" id="rightGableW" oninput="calculate()" min="0"></td>
+                <td data-label="FACTOR" id="rightFactor">0</td>
+                <td data-label=""></td>
+                <td data-label=""></td>
+            </tr>
+            <tr>
+                <td data-label="LOCATION">OTHER</td>
+                <td data-label="LENGTH"><input type="number" id="otherLength" oninput="calculate()" min="0"></td>
+                <td data-label="TOP PLATE (H)"><input type="number" id="otherTopPlate" oninput="calculate()" min="0"></td>
+                <td data-label="GABLE (H)"><input type="number" id="otherGableH" oninput="calculate()" min="0"></td>
+                <td data-label="GABLE (W)"><input type="number" id="otherGableW" oninput="calculate()" min="0"></td>
+                <td data-label="FACTOR" id="otherFactor">0</td>
+                <td data-label=""></td>
+                <td data-label=""></td>
+            </tr>
+            <tr>
+                <td data-label=""></td>
+                <td data-label=""></td>
+                <td data-label=""></td>
+                <td data-label=""></td>
+                <td data-label=""></td>
+                <td data-label=""></td>
+                <td data-label=""></td>
+                <td data-label=""></td>
+            </tr>
+            <tr>
+                <td data-label="LOCATION">LOCATION</td>
+                <td data-label="PRIMARY">PRIMARY</td>
+                <td data-label="GABLE">GABLE</td>
+                <td data-label="WINDOWS">WINDOWS</td>
+                <td data-label="DOORS">DOORS</td>
+                <td data-label="GARAGE">GARAGE</td>
+                <td data-label="OPENING (SF)">OPENING (SF)</td>
+                <td data-label="TOTAL SQFT">TOTAL SQFT</td>
+            </tr>
+            <tr>
+                <td data-label="LOCATION">FRONT</td>
+                <td data-label="PRIMARY" id="frontPrimary">0</td>
+                <td data-label="GABLE" id="frontGable">0</td>
+                <td data-label="WINDOWS"><input type="number" id="frontWindows" oninput="calculate()" min="0"></td>
+                <td data-label="DOORS"><input type="number" id="frontDoors" oninput="calculate()" min="0"></td>
+                <td data-label="GARAGE"><input type="number" id="frontGarage" oninput="calculate()" min="0"></td>
+                <td data-label="OPENING (SF)" id="frontOpening">0</td>
+                <td data-label="TOTAL SQFT" id="frontTotal">0</td>
+            </tr>
+            <tr>
+                <td data-label="LOCATION">LEFT</td>
+                <td data-label="PRIMARY" id="leftPrimary">0</td>
+                <td data-label="GABLE" id="leftGable">0</td>
+                <td data-label="WINDOWS"><input type="number" id="leftWindows" oninput="calculate()" min="0"></td>
+                <td data-label="DOORS"><input type="number" id="leftDoors" oninput="calculate()" min="0"></td>
+                <td data-label="GARAGE"><input type="number" id="leftGarage" oninput="calculate()" min="0"></td>
+                <td data-label="OPENING (SF)" id="leftOpening">0</td>
+                <td data-label="TOTAL SQFT" id="leftTotal">0</td>
+            </tr>
+            <tr>
+                <td data-label="LOCATION">REAR</td>
+                <td data-label="PRIMARY" id="rearPrimary">0</td>
+                <td data-label="GABLE" id="rearGable">0</td>
+                <td data-label="WINDOWS"><input type="number" id="rearWindows" oninput="calculate()" min="0"></td>
+                <td data-label="DOORS"><input type="number" id="rearDoors" oninput="calculate()" min="0"></td>
+                <td data-label="GARAGE"><input type="number" id="rearGarage" oninput="calculate()" min="0"></td>
+                <td data-label="OPENING (SF)" id="rearOpening">0</td>
+                <td data-label="TOTAL SQFT" id="rearTotal">0</td>
+            </tr>
+            <tr>
+                <td data-label="LOCATION">RIGHT</td>
+                <td data-label="PRIMARY" id="rightPrimary">0</td>
+                <td data-label="GABLE" id="rightGable">0</td>
+                <td data-label="WINDOWS"><input type="number" id="rightWindows" oninput="calculate()" min="0"></td>
+                <td data-label="DOORS"><input type="number" id="rightDoors" oninput="calculate()" min="0"></td>
+                <td data-label="GARAGE"><input type="number" id="rightGarage" oninput="calculate()" min="0"></td>
+                <td data-label="OPENING (SF)" id="rightOpening">0</td>
+                <td data-label="TOTAL SQFT" id="rightTotal">0</td>
+            </tr>
+            <tr>
+                <td data-label="LOCATION">OTHER</td>
+                <td data-label="PRIMARY" id="otherPrimary">0</td>
+                <td data-label="GABLE" id="otherGable">0</td>
+                <td data-label="WINDOWS"><input type="number" id="otherWindows" oninput="calculate()" min="0"></td>
+                <td data-label="DOORS"><input type="number" id="otherDoors" oninput="calculate()" min="0"></td>
+                <td data-label="GARAGE"><input type="number" id="otherGarage" oninput="calculate()" min="0"></td>
+                <td data-label="OPENING (SF)" id="otherOpening">0</td>
+                <td data-label="TOTAL SQFT" id="otherTotal">0</td>
+            </tr>
+            <tr>
+                <td data-label=""></td>
+                <td data-label=""></td>
+                <td data-label=""></td>
+                <td data-label=""></td>
+                <td data-label=""></td>
+                <td data-label=""></td>
+                <td data-label=""></td>
+                <td data-label="TOTAL SQFT" id="grandTotal">0</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    // Load saved data from localStorage
+    window.onload = function() {
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            const savedValue = localStorage.getItem(input.id);
+            if (savedValue) input.value = savedValue;
+        });
+        calculate();
+        updateSqrtFloorplan();
+    };
+
+    // Save floorplanInput to localStorage and update D1 on input
+    document.getElementById('floorplanInput').addEventListener('input', function() {
+        localStorage.setItem('floorplanInput', this.value);
+        updateSqrtFloorplan();
+    });
+
+    function updateSqrtFloorplan() {
+        const floorplanInput = parseFloat(document.getElementById('floorplanInput').value) || 0;
+        const sqrtValue = Math.sqrt(floorplanInput);
+        document.getElementById('sqrtFloorplan').textContent = sqrtValue.toFixed(2);
+        console.log(`Sqrt Floorplan: sqrt(${floorplanInput}) = ${sqrtValue}`);
+    }
+
+    function calculate() {
+        const locations = ['front', 'left', 'rear', 'right', 'other'];
+        let totalMainSqft = 0;
+
+        locations.forEach(loc => {
+            // Get input values
+            const length = parseFloat(document.getElementById(`${loc}Length`).value) || 0;
+            const topPlate = parseFloat(document.getElementById(`${loc}TopPlate`).value) || 0;
+            const gableH = parseFloat(document.getElementById(`${loc}GableH`).value) || 0;
+            const gableW = parseFloat(document.getElementById(`${loc}GableW`).value) || 0;
+            const windows = parseFloat(document.getElementById(`${loc}Windows`).value) || 0;
+            const doors = parseFloat(document.getElementById(`${loc}Doors`).value) || 0;
+            const garage = parseFloat(document.getElementById(`${loc}Garage`).value) || 0;
+
+            // Save inputs to localStorage
+            ['Length', 'TopPlate', 'GableH', 'GableW', 'Windows', 'Doors', 'Garage'].forEach(field => {
+                localStorage.setItem(`${loc}${field}`, document.getElementById(`${loc}${field}`).value);
+            });
+
+            // Calculate PRIMARY (Length * Top Plate Height)
+            const primary = length * topPlate;
+            document.getElementById(`${loc}Primary`).textContent = primary.toFixed(2);
+            console.log(`${loc}Primary: Length=${length} * TopPlate=${topPlate} = ${primary}`);
+
+            // Calculate GABLE ((Gable Height * Gable Width) / 2)
+            const gable = (gableH * gableW) / 2;
+            document.getElementById(`${loc}Gable`).textContent = gable.toFixed(2);
+            console.log(`${loc}Gable: (GableH=${gableH} * GableW=${gableW}) / 2 = ${gable}`);
+
+            // Calculate FACTOR ((Primary + Gable) * 0.1)
+            const factor = (primary + gable) * 0.1;
+            document.getElementById(`${loc}Factor`).textContent = factor.toFixed(2);
+            console.log(`${loc}Factor: (Primary=${primary} + Gable=${gable}) * 0.1 = ${factor}`);
+
+            // Calculate OPENING (SF) (Windows * 15 + Doors * 25 + Garage * 100)
+            const opening = (windows * 15) + (doors * 25) + (garage * 100);
+            document.getElementById(`${loc}Opening`).textContent = opening.toFixed(2);
+            console.log(`${loc}Opening: (Windows=${windows} * 15) + (Doors=${doors} * 25) + (Garage=${garage} * 100) = ${opening}`);
+
+            // Calculate TOTAL SQFT (Factor + Primary + Gable - Opening)
+            const total = factor + primary + gable - opening;
+            document.getElementById(`${loc}Total`).textContent = total.toFixed(2);
+            console.log(`${loc}Total: (Factor=${factor} + Primary=${primary} + Gable=${gable}) - Opening=${opening} = ${total}`);
+
+            // Update total for H15
+            totalMainSqft += total;
+        });
+
+        // Update H15 (Grand Total)
+        document.getElementById('grandTotal').textContent = totalMainSqft.toFixed(2);
+        console.log(`Grand Total: Sum(H10:H14) = ${totalMainSqft}`);
+    }
+</script>
+</body>
+</html>
