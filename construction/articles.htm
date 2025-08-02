@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construction Gods - Premier Construction Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        #home {
+            background-image: url('https://source.unsplash.com/random/1600x900/?construction'), url('https://source.unsplash.com/random/200x200/?logo');
+            background-position: center, center;
+            background-repeat: no-repeat, no-repeat;
+            background-size: cover, contain;
+            background-blend-mode: overlay;
+            position: relative;
+        }
+        #home .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            z-index: 0;
+        }
+        #home .container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://source.unsplash.com/random/200x200/?logo');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 0.10;
+            z-index: 1;
+        }
+        #home .container > * {
+            position: relative;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-200">
+    <!-- Header -->
+    <header class="bg-blue-900 text-white py-4 sticky top-0 z-10">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <h1 class="text-xl sm:text-2xl font-bold">ConstructionGods.com</h1>
+            <nav class="hidden md:block">
+                <ul class="flex space-x-6">
+                    <li><a href="https://www.constructiongods.com" class="hover:text-blue-300">Home</a></li>
+                    <li><a href="#library" class="hover:text-blue-300">Library</a></li>
+                    <li><a href="#Affiliate_Ads" class="hover:text-blue-300">Affiliate Ads</a></li>
+                </ul>
+            </nav>
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <nav id="mobile-menu" class="hidden md:hidden bg-blue-800 text-white px-4 py-2">
+            <ul class="flex flex-col space-y-2">
+                <li><a href="https://www.constructiongods.com" class="hover:text-blue-300">Home</a></li>
+                <li><a href="#library" class="hover:text-blue-300">Library</a></li>
+                <li><a href="#Affiliate_Ads" class="hover:text-blue-300">Affiliate Ads</a></li>
+            </ul>
+        </nav>
+    </header>
+    <!-- Hero Section (containing all other sections) -->
+    <section id="home" class="bg-gray-100 h-auto flex items-center relative">
+        <div class="container mx-auto px-4 text-center pt-16"> <!-- Added pt-16 for spacing -->
+            <!-- Library Section -->
+            <h2 id="library" class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Article Base</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- New article card (placed first) -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <img src="https://github.com/IkeGilbert/public/blob/main/construction/interviews.jpg?raw=true" alt="Construction Interview Tips" class="w-full h-48 object-contain rounded-md mb-4">
+                    <h3 class="text-xl font-semibold mb-2">Construction Interview Tips</h3>
+                    <p class="text-sm text-gray-600 mb-4">Published: 2025-08-02</p>
+                    <p class="text-gray-700 mb-4">Explore essential tips for conducting meaningful interviews to build a qualified construction workforce.</p>
+                    <p class="text-gray-600 text-sm mb-4">Meaningful interviews are essential for building a qualified workforce. Integrity is everything and here are a few examples of questions that can help guide managers in digging deeper into a potential employees construction knowledge and mindset...</p>
+                    <a href="https://grok.com/chat/2c3c0db3-5b27-4cfd-a0af-99a414792ad4" class="text-blue-600 hover:underline" target="_blank">Read More</a>
+                </div>
+                <!-- Fourth article card -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <img src="https://github.com/IkeGilbert/public/blob/main/construction/crap%20engineering.png?raw=true" alt="DIY Plumbing Repair" class="w-full h-48 object-contain rounded-md mb-4">
+                    <h3 class="text-xl font-semibold mb-2">Let's talk about clueless DIY, Discount plumbing and Crackhead Engineering!</h3>
+                    <p class="text-sm text-gray-600 mb-4">Published: 2019-12-23</p>
+                    <p class="text-gray-700 mb-4">Learn about a DIY toilet repair gone wrong, including a missing flange and an unconventional previous fix with an aluminum pie plate and gasoline funnel, highlighting common plumbing pitfalls.</p>
+                    <p class="text-gray-600 text-sm mb-4">Here is a great reason to NEVER fully caulk a toilet bowl to the floor. If there is ever a future issue with the wax ring, you need to know it's leaking!</p>
+                    <a href="https://ikeshumbleopinion.blogspot.com/2019/12/lets-talk-about-clueless-diy-discount.html" class="text-blue-600 hover:underline" target="_blank">Read More</a>
+                </div>
+                <!-- First article card -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgxaMw3H3HCBXbrJxYDOiy7hT_WJMJK9UMmylczcMeU8H3k0wOpOZCwyAUlozWUwHlzmrxo81GtRhrZHinTwVuJNKss7r0BZ47-G3gCB0NZlag2uv41vMbQKcb3z3Ez2tmbQ5oaq4UrfFI/s2048/display+test+.01.jpg" alt="Treadmill Calibration" class="w-full h-48 object-contain rounded-md mb-4">
+                    <h3 class="text-xl font-semibold mb-2">How Accurate Is Your Treadmill Display Distance? + Calibrating Your Running Watch To Your Treadmill</h3>
+                    <p class="text-sm text-gray-600 mb-4">Published: 2021-01-07</p>
+                    <p class="text-gray-700 mb-4">Learn how to test your treadmill's distance accuracy and calibrate your running watch, like the Garmin Instinct, to ensure precise indoor running data.</p>
+                    <p class="text-gray-600 text-sm mb-4">Work / Life balance is important for all professionals, the construction industry typically produces some of the highest stress level roles in the workforce. It's important to keep the body and mind tuned for success. This article highlights one of my favorite pastimes and the need to sometimes look "outside the box" for solutions...</p>
+                    <a href="https://ikeshumbleopinion.blogspot.com/2021/01/how-accurate-is-your-treadmill-display.html" class="text-blue-600 hover:underline" target="_blank">Read More</a>
+                </div>
+                <!-- Second article card -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiZhMFrpwRaZuBo5kxUgBL-jKdD2cDW-v1xk6aXEjIQ6AsP2ImghTLa0fbZd1CCQkfUmCAC0rG-gVCqmzA4zKfa3oScybIiDSrWr0_ZbaSKlt_Q6sVnkXRkp7jYRPgM2iNrBHZcWVVHzy8/s2048/PXL_20210105_000309148.jpg" alt="Custom Computer Build" class="w-full h-48 object-contain rounded-md mb-4">
+                    <h3 class="text-xl font-semibold mb-2">Not a "Gaming" computer - NASA & the CIA called after it was done though ;)</h3>
+                    <p class="text-sm text-gray-600 mb-4">Published: 2021-01-04</p>
+                    <p class="text-gray-700 mb-4">Discover the rebuild of a powerful ATX tower computer with a Ryzen 6 Core CPU, MSI Pro Motherboard, 32MB DDR4 memory, and advanced cooling, showcasing a passion for tech.</p>
+                    <p class="text-gray-600 text-sm mb-4">As a power linux user for many years, I've always believed keeping technology skills honed well serves individuals in the construction industry. These can be hard to personally develop, continual learning is key. Let me help guide your construction technology choices with my personal 30+ years of tech experience.</p>
+                    <a href="https://ikeshumbleopinion.blogspot.com/2021/01/not-gaming-computer-nasa-cia-called.html" class="text-blue-600 hover:underline" target="_blank">Read More</a>
+                </div>
+                <!-- Third article card -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoed0j8s6xjxaxoaPuVuiUBBZTqQY0fwhyphenhyphen9rOpJDSwAyjsEPkBcwAChQ43bzsvcMiASWyq4OQI_CqdYm01fotrXKhzgND0NEUln26AZ61ld8ii7esnYqHLgbwQk3jHPgla9MDFqpG0e74/s1600/1592066344699592-0.png" alt="COVID-19 Construction Badge" class="w-full h-48 object-contain rounded-md mb-4">
+                    <h3 class="text-xl font-semibold mb-2">COVID-19</h3>
+                    <p class="text-sm text-gray-600 mb-4">Published: 2020-06-13</p>
+                    <p class="text-gray-700 mb-4">Explore a custom badge/sticker created for a construction hard hat and STRAVA club during the COVID-19 lockdown, reflecting adaptability in challenging times.</p>
+                    <p class="text-gray-600 text-sm mb-4">Construction technology involves many skills, one that can be used often is understanding graphics in programs such as Photoshop or GIMP (linux). These skills can be used to draw specific attention to details in submittals, RFIs and change orders. Here is a showcase of this skill used during the Covid pandemic.</p>
+                    <a href="https://ikeshumbleopinion.blogspot.com/2020/06/covid-19.html" class="text-blue-600 hover:underline" target="_blank">Read More</a>
+                </div>
+                <!-- New articles will be added here -->
+            </div>
+            <!-- Affiliate Ads Section -->
+            <h2 id="Affiliate_Ads" class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Affiliate Ads</h2>
+            <div class="max-w-lg mx-auto">
+                <div id="ad-carousel" class="max-w-lg mx-auto">
+                    <!-- Ad content will be injected here by JavaScript -->
+                </div>
+            </div>
+            <!-- Footer -->
+            <footer class="bg-blue-900 text-white py-4">
+                <div class="container mx-auto px-4 text-center">
+                    <p class="text-sm sm:text-base">&copy; 2025 Construction Gods. All rights reserved.</p>
+                </div>
+            </footer>
+        </div>
+    </section>
+    <!-- JavaScript for Mobile Menu Toggle and Ad Carousel -->
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Ad Carousel Logic
+        const ads = [
+            {
+                image: 'https://m.media-amazon.com/images/I/61cccrnU9mL._AC_SX679_.jpg',
+                title: 'ALORAIR Crawl Space Dehumidifier',
+                description: 'Energy Star Certified 120 PPD dehumidifier for crawl spaces and basements.',
+                link: 'https://amzn.to/4mn1D8t',
+                recommendation: '"This unit is recommended for both DIY and professional installations where damp crawl spaces or basements need a permanent dehumidification solution to keep RH levels low. I\'ve used this exact unit under my home over 2 years now and had zero issues with functionality. Highly recommend! - Ike Gilbert"'
+            }
+        ];
+
+        // Randomly select an ad on page load (single ad for now, will randomize when more are added)
+        const randomAd = ads[Math.floor(Math.random() * ads.length)];
+        const adCarousel = document.getElementById('ad-carousel');
+        adCarousel.innerHTML = `
+            <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                <img src="${randomAd.image}" alt="${randomAd.title}" class="w-full h-48 object-contain rounded-md mb-4">
+                <h3 class="text-xl font-semibold mb-2">${randomAd.title}</h3>
+                <p class="text-gray-700 mb-4">${randomAd.description}</p>
+                <p class="text-gray-600 text-sm mb-4">${randomAd.recommendation}</p>
+                <a href="${randomAd.link}" class="text-blue-600 hover:underline" target="_blank">Shop Now</a>
+            </div>
+        `;
+    </script>
+</body>
+</html>
