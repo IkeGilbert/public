@@ -1,164 +1,646 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF0-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Construction Gods - Premier Construction Services</title>
+    <title>Word Of Mouth Rewards App</title>
+    <!-- Tailwind CSS CDN for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter font for better readability -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        #home {
-            background-image: url('https://source.unsplash.com/random/1600x900/?construction'), url('https://github.com/IkeGilbert/public/blob/main/construction/ConstructionGods%20logo.png?raw=true');
-            background-position: center, center;
-            background-repeat: no-repeat, no-repeat;
-            background-size: cover, contain;
-            background-blend-mode: overlay;
-            position: relative;
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5; /* Light gray background */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top for better content flow */
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
         }
-        #home .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
+        .container {
+            background-color: #ffffff;
+            border-radius: 12px; /* More rounded corners */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Softer shadow */
+            padding: 30px;
             width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.1); /* Reduced overlay opacity for more transparency */
-            z-index: 0;
+            max-width: 600px; /* Max width for larger screens */
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
-        #home .container::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
+        .input-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+        }
+        .input-group input {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: 1px solid #d1d5db; /* Light gray border */
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .input-group input:focus {
+            border-color: #6366f1; /* Indigo on focus */
+        }
+        .btn {
+            background-color: #6366f1; /* Indigo button */
+            color: #ffffff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            border: none; /* Remove default button border */
+        }
+        .btn:hover {
+            background-color: #4f46e5; /* Darker indigo on hover */
+            transform: translateY(-1px); /* Slight lift effect */
+        }
+        .user-id-display {
+            font-size: 0.85rem;
+            color: #6b7280;
+            text-align: center;
+            margin-top: 10px;
+            word-break: break-all; /* Ensure long IDs break */
+        }
+        .message-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none; /* Allow clicks through */
+        }
+        .message-box.show {
+            opacity: 1;
+        }
+        .reward-section {
+            padding-top: 0;
+            margin-top: 0;
+        }
+        .reward-code-display {
+            background-color: #e0f2fe; /* Light blue background */
+            border: 1px dashed #90cdf4; /* Dashed blue border */
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2b6cb0; /* Darker blue text */
+        }
+        .directory-section {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+        .directory-item {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .directory-item h3 {
+            font-weight: 600;
+            color: #374151;
+        }
+        .directory-item p {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        .directory-item .qr-code-small {
+            margin-top: 10px;
+            align-self: center; /* Center QR code within the item */
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            padding: 3px;
+        }
+        .add-business-form {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .add-business-form input {
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+        .add-business-form input:focus {
+            border-color: #6366f1;
+        }
+        .add-business-form .btn {
             width: 100%;
-            height: 100%;
-            background-image: url('https://github.com/IkeGilbert/public/blob/main/construction/ConstructionGods%20logo.png?raw=true');
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: contain;
-            opacity: 0.10; /* Reduced logo opacity for more transparency */
-            z-index: 1;
         }
-        #home .container > * {
-            position: relative;
-            z-index: 2;
+        .directory-loading-message {
+            text-align: center;
+            color: #6b7280;
+            margin-top: 10px;
+        }
+        .referral-text {
+            font-size: 0.85rem;
+            color: #4b5563; /* Slightly darker gray for better contrast */
+            margin-top: 15px; /* Space above the text */
+            line-height: 1.4;
+            text-align: left; /* Changed from center to left */
+        }
+        .validation-section {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+        .validation-section .input-group input {
+            width: 100%; /* Make inputs full width in validation section */
+        }
+        .validation-message {
+            background-color: #fffbeb; /* Light yellow background */
+            border: 1px solid #fcd34d; /* Yellow border */
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #b45309; /* Darker yellow text */
+            margin-top: 10px;
         }
     </style>
 </head>
-<body class="font-sans bg-gray-200">
-    <!-- Header -->
-    <header class="bg-blue-900 text-white py-4 sticky top-0 z-10">
-        <div class="container mx-auto flex justify-between items-center px-4">
-            <h1 class="text-xl sm:text-2xl font-bold">ConstructionGods.com</h1>
-            <nav class="hidden md:block">
-                <ul class="flex space-x-6">
-                    <li><a href="#home" class="hover:text-blue-300">Home</a></li>
-                    <li><a href="#focus" class="hover:text-blue-300">Focus</a></li>
-                    <li><a href="#tools" class="hover:text-blue-300">Tools</a></li>
-                    <li><a href="#about" class="hover:text-blue-300">About</a></li>
-                    <li><a href="#contact" class="hover:text-blue-300">Contact</a></li>
-                </ul>
-            </nav>
-            <!-- Mobile Menu Button -->
-            <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
-            </button>
-        </div>
-        <!-- Mobile Menu -->
-        <nav id="mobile-menu" class="hidden md:hidden bg-blue-800 text-white px-4 py-2">
-            <ul class="flex flex-col space-y-2">
-                <li><a href="#home" class="hover:text-blue-300">Home</a></li>
-                <li><a href="#focus" class="hover:text-blue-300">Focus</a></li>
-                <li><a href="#tools" class="hover:text-blue-300">Tools</a></li>
-                <li><a href="#about" class="hover:text-blue-300">About</a></li>
-                <li><a href="#contact" class="hover:text-blue-300">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+<body>
+    <div class="container">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-4">Word Of Mouth Rewards</h1>
 
-    <!-- Hero Section -->
-    <section id="home" class="bg-gray-100 h-[60vh] sm:h-screen flex items-center relative">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-gray-800">Professional Consultation Services</h2>
-            <p class="text-sm sm:text-base md:text-lg max-w-lg mx-auto mb-6 text-gray-800">Guidance and resources for commercial / residential builders, general contractors inspectors, home owners and investors</p>
-            <a href="#contact" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded text-sm sm:text-base mt-20">Request Information</a>
-        </div>
-    </section>
-
-    <!-- Focus Section -->
-    <section id="focus" class="py-8 sm:py-16">
-        <div class="container mx-auto px-4">
-            <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Our Focus : Supporting</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md">
-                    <h3 class="text-lg sm:text-xl font-semibold mb-2 text-center">Residential Construction</h3>
-                </div>
-                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md">
-                    <h3 class="text-lg sm:text-xl font-semibold mb-2 text-center">Commercial Projects</h3>
-                </div>
-                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md">
-                    <h3 class="text-lg sm:text-xl font-semibold mb-2 text-center">Remodeling & Repairs</h3>
-                </div>
+        <!-- Word Of Mouth Rewards Section -->
+        <div class="reward-section">
+            <h2 class="text-2xl font-bold text-center text-gray-700 mb-4">Generate Your Reward Code!</h2>
+            <div class="input-group flex-col md:flex-row">
+                <input type="text" id="customerNameInput" placeholder="Your Name" class="w-full">
+                <input type="tel" id="customerPhoneInput" placeholder="Phone Number" class="w-full">
+                <input type="email" id="customerEmailInput" placeholder="Email Address" class="w-full">
+            </div>
+            <button id="generateRewardBtn" class="btn w-full mt-4">Generate 10% Off Code</button>
+            <p class="referral-text">
+                Enter your code in the validation box to continue earning. Share your referral code with friends. When they visit and combine their code with yours, they will get the same discount and you will accrue an additional 3% per unique customer you refer. The maximum referral bonus is 25% off and can be redeemed once per month for 12 months.
+            </p>
+            <div id="rewardCodeDisplay" class="reward-code-display mt-4 hidden">
+                <!-- Reward code and message will appear here -->
             </div>
         </div>
-    </section>
 
-    <!-- Tools Section -->
-    <section id="tools" class="py-8 sm:py-16">
-        <div class="container mx-auto px-4">
-            <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Tools</h2>
-            <div class="grid grid-cols-1 gap-6 sm:gap-8">
-                <div class="bg-white p-2 sm:p-3 rounded-lg shadow-md max-w-[60%] mx-auto">
-                    <a href="https://ikegilbert.github.io/public/construction/gp_audit_tool.html" target="_blank" class="text-lg sm:text-xl font-semibold mb-2 text-center hover:text-blue-600">Gross Profit / Markup Calculator</a>
+        <!-- Code Validation Box Section -->
+        <div class="validation-section">
+            <h2 class="text-2xl font-bold text-center text-gray-700 mb-4">Code Validation Box</h2>
+            <div class="input-group flex-col md:flex-row">
+                <input type="text" id="clientCodeInput" placeholder="Your Reward Code (e.g., ABCDE)" class="w-full" required>
+                <input type="text" id="businessCodeInput" placeholder="Business Code (e.g., from QR)" class="w-full" required>
+                <input type="text" id="friendCodeInput" placeholder="Friend's Referral Code (Optional)" class="w-full">
+            </div>
+            <button id="validateCodesBtn" class="btn w-full mt-4">Validate Codes</button>
+            <div id="validationMessageDisplay" class="validation-message mt-4 hidden">
+                <!-- Validation messages will appear here -->
+            </div>
+        </div>
+
+        <!-- Business Directory Section -->
+        <div class="directory-section">
+            <h2 class="text-2xl font-bold text-center text-gray-700 mb-4">Business Directory</h2>
+
+            <!-- Form to Add New Business -->
+            <div class="add-business-form">
+                <h3 class="text-xl font-bold text-gray-700">Add Your Business</h3>
+                <input type="text" id="businessNameInput" placeholder="Business Name (required)" required>
+                <input type="text" id="businessLocationInput" placeholder="Location (required)" required>
+                <input type="tel" id="businessPhoneInput" placeholder="Phone Number (required)" required>
+                <button id="addBusinessBtn" class="btn">Submit Business</button>
+                <div id="newBusinessQrCodeDisplay" class="reward-code-display mt-4 hidden">
+                    <!-- QR code for the newly added business will appear here -->
                 </div>
-                <div class="bg-white p-2 sm:p-3 rounded-lg shadow-md max-w-[60%] mx-auto">
-                    <a href="https://ikegilbert.github.io/public/construction/siding_takeoff.html" target="_blank" class="text-lg sm:text-xl font-semibold mb-2 text-center hover:text-blue-600">Siding Takeoff Calculator</a>
-                </div>
+            </div>
+
+            <div id="businessList">
+                <p class="directory-loading-message" id="directoryLoadingMessage">Loading businesses...</p>
+                <!-- Business listings will be loaded here by JavaScript -->
             </div>
         </div>
-    </section>
 
-    <!-- About Section -->
-    <section id="about" class="bg-gray-100 py-8 sm:py-16" style="background-image: url('https://source.unsplash.com/random/1600x900/?construction'); background-position: center; background-repeat: no-repeat; background-size: cover;">
-        <div class="container mx-auto px-4">
-            <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">About Us</h2>
-            <p class="text-sm sm:text-lg text-left max-w-xl sm:max-w-2xl mx-auto">ConstructionGods.com is your trusted source for construction information and field tools. Owner Ike Gilbert has over 35 years of experience delivering top-tier multi-state projects. Our unique and proven skillsets include project planning, project and vendor management, scope of work definition, national pricing strategy for materials and labor, new home inspection, data audits, reporting and construction budgets. Learn how to leverage cutting edge technologies for your construction business needs.</p>
-            <div class="flex justify-center mt-6">
-                <a href="https://www.linkedin.com/in/ikegilbert" target="_blank">
-                    <div class="aspect-square max-w-xs">
-                        <img src="https://github.com/IkeGilbert/public/blob/main/construction/ike_linkedin.png?raw=true" alt="Ike Gilbert LinkedIn Profile" class="max-w-full h-auto">
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
+        <p id="userIdDisplay" class="user-id-display"></p>
+    </div>
 
-    <!-- Contact Section -->
-    <section id="contact" class="bg-gray-100 py-8 sm:py-16" style="background-image: url('https://source.unsplash.com/random/1600x900/?construction'); background-position: center; background-repeat: no-repeat; background-size: cover;">
-        <div class="container mx-auto px-4">
-            <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Contact Us</h2>
-            <div class="max-w-md sm:max-w-lg mx-auto flex justify-center items-center min-h-[600px]">
-                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdcK_0HVW6gBmDky0w5ucJJv0DjVqogEfawl7fK12TnbNA0-w/viewform?embedded=true" width="640" height="1112" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
-            </div>
-        </div>
-    </section>
+    <!-- Custom message box for alerts -->
+    <div id="messageBox" class="message-box"></div>
 
-    <!-- Footer -->
-    <footer class="bg-blue-900 text-white py-4">
-        <div class="container mx-auto px-4 text-center">
-            <p class="text-sm sm:text-base">&copy; 2025 Construction Gods. All rights reserved.</p>
-        </div>
-    </footer>
+    <!-- qrcode.js CDN for QR code generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode.js/1.0.0/qrcode.min.js"></script>
 
-    <!-- JavaScript for Mobile Menu Toggle -->
-    <script>
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+    <!-- Firebase SDKs and main application logic -->
+    <script type="module">
+        // Import necessary Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import {
+            getAuth,
+            signInAnonymously,
+            signInWithCustomToken,
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import {
+            getFirestore,
+            collection,
+            addDoc,
+            onSnapshot,
+            deleteDoc,
+            doc
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- Global Variables (provided by Canvas environment) ---
+        // __app_id: The current app ID for Firestore paths.
+        // __firebase_config: Firebase project configuration.
+        // __initial_auth_token: Custom auth token for initial sign-in.
+
+        let app;
+        let db;
+        let auth;
+        let currentUserId = null; // To store the authenticated user ID
+
+        // Elements for new customer rewards section
+        const customerNameInput = document.getElementById('customerNameInput');
+        const customerPhoneInput = document.getElementById('customerPhoneInput');
+        const customerEmailInput = document.getElementById('customerEmailInput');
+        const generateRewardBtn = document.getElementById('generateRewardBtn');
+        const rewardCodeDisplay = document.getElementById('rewardCodeDisplay');
+
+        // Elements for Code Validation Box
+        const clientCodeInput = document.getElementById('clientCodeInput');
+        const businessCodeInput = document.getElementById('businessCodeInput');
+        const friendCodeInput = document.getElementById('friendCodeInput');
+        const validateCodesBtn = document.getElementById('validateCodesBtn');
+        const validationMessageDisplay = document.getElementById('validationMessageDisplay');
+
+        // Elements for new business directory form
+        const businessNameInput = document.getElementById('businessNameInput');
+        const businessLocationInput = document.getElementById('businessLocationInput');
+        const businessPhoneInput = document.getElementById('businessPhoneInput');
+        const addBusinessBtn = document.getElementById('addBusinessBtn');
+        const newBusinessQrCodeDisplay = document.getElementById('newBusinessQrCodeDisplay');
+        const businessListDiv = document.getElementById('businessList');
+        const directoryLoadingMessage = document.getElementById('directoryLoadingMessage');
+
+        // General UI elements
+        const userIdDisplay = document.getElementById('userIdDisplay');
+        const messageBox = document.getElementById('messageBox');
+
+        /**
+         * Displays a temporary message to the user.
+         * @param {string} message The message to display.
+         * @param {number} duration The duration in milliseconds to show the message.
+         */
+        function showMessage(message, duration = 3000) {
+            messageBox.textContent = message;
+            messageBox.classList.add('show');
+            setTimeout(() => {
+                messageBox.classList.remove('show');
+            }, duration);
+        }
+
+        /**
+         * Generates a random alphanumeric code of a specified length.
+         * @param {number} length The desired length of the code.
+         * @returns {string} The generated alphanumeric code.
+         */
+        function generateAlphanumericCode(length) {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            const charactersLength = characters.length;
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        }
+
+        /**
+         * Initializes Firebase and sets up authentication.
+         */
+        async function initializeFirebase() {
+            try {
+                // Parse Firebase configuration from the global variable
+                const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+                const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+                // Initialize Firebase app
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                // Set up authentication state listener
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        // User is signed in
+                        currentUserId = user.uid;
+                        userIdDisplay.textContent = `Your User ID: ${currentUserId}`;
+                        console.log("User signed in:", currentUserId);
+                        setupBusinessDirectoryListener(appId, currentUserId); // Start listening to businesses
+                    } else {
+                        // User is signed out or not yet signed in
+                        currentUserId = null;
+                        userIdDisplay.textContent = "Signing in...";
+                        console.log("No user signed in. Attempting sign-in.");
+                        // Attempt to sign in with custom token or anonymously
+                        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                            await signInWithCustomToken(auth, __initial_auth_token);
+                            console.log("Signed in with custom token.");
+                        } else {
+                            await signInAnonymously(auth);
+                            console.log("Signed in anonymously.");
+                        }
+                    }
+                });
+
+            } catch (error) {
+                console.error("Error initializing Firebase:", error);
+                showMessage("Failed to initialize app. Please try again.", 5000);
+            }
+        }
+
+        /**
+         * Adds a new reward entry to Firestore.
+         * @param {string} appId The application ID.
+         * @param {string} userId The current user's ID.
+         * @param {object} customerData Object containing name, phone, email, and rewardCode.
+         */
+        async function addRewardEntry(appId, userId, customerData) {
+            if (!db || !userId) {
+                showMessage("App not ready. Please wait for initialization.", 3000);
+                return;
+            }
+
+            try {
+                const rewardsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/rewards`);
+                await addDoc(rewardsCollectionRef, {
+                    name: customerData.name,
+                    phone: customerData.phone,
+                    email: customerData.email,
+                    rewardCode: customerData.rewardCode,
+                    timestamp: Date.now()
+                });
+                showMessage("Reward code generated and saved!", 3000);
+            } catch (error) {
+                console.error("Error adding reward entry: ", error);
+                showMessage("Error saving reward. Please try again.", 5000);
+            }
+        }
+
+        /**
+         * Generates and displays a QR code in a specified element.
+         * @param {HTMLElement} element The DOM element to render the QR code into.
+         * @param {string} url The URL for the QR code to point to.
+         * @param {number} size The width and height of the QR code.
+         */
+        function generateQRCode(element, url, size = 128) {
+            element.innerHTML = ''; // Clear any existing QR code
+            new window.QRCode(element, {
+                text: url,
+                width: size,
+                height: size,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : window.QRCode.CorrectLevel.H
+            });
+        }
+
+        /**
+         * Adds a new business entry to Firestore and generates a QR code.
+         * @param {string} appId The application ID.
+         * @param {string} userId The current user's ID.
+         * @param {object} businessData Object containing name, location, and phone.
+         */
+        async function addBusinessEntry(appId, userId, businessData) {
+            if (!db || !userId) {
+                showMessage("App not ready. Please wait for initialization.", 3000);
+                return;
+            }
+            if (!businessData.name || !businessData.location || !businessData.phone) {
+                showMessage("Please fill in all business details!", 3000);
+                return;
+            }
+
+            try {
+                const businessesCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/businesses`);
+                const docRef = await addDoc(businessesCollectionRef, {
+                    name: businessData.name.trim(),
+                    location: businessData.location.trim(),
+                    phone: businessData.phone.trim(),
+                    timestamp: Date.now()
+                });
+
+                // Generate a unique URL for the business's QR code
+                // This URL points to the main page with a unique ID parameter
+                const businessPageUrl = `https://ikegilbert.github.io/public/index.html?businessId=${docRef.id}`;
+
+                // Display QR code for the newly added business
+                newBusinessQrCodeDisplay.innerHTML = `
+                    <p class="text-center text-gray-700 mb-2">Share this QR code for your business:</p>
+                    <div id="tempBusinessQrCode" class="qr-code-small"></div>
+                    <p class="text-center text-gray-500 mt-2">Code points to: ${businessPageUrl}</p>
+                `;
+                newBusinessQrCodeDisplay.classList.remove('hidden');
+                generateQRCode(document.getElementById('tempBusinessQrCode'), businessPageUrl, 100); // Smaller QR code for form
+
+                showMessage("Business added and QR code generated!", 3000);
+
+                // Clear input fields
+                businessNameInput.value = '';
+                businessLocationInput.value = '';
+                businessPhoneInput.value = '';
+
+            } catch (error) {
+                console.error("Error adding business entry: ", error);
+                showMessage("Error saving business. Please try again.", 5000);
+            }
+        }
+
+        /**
+         * Sets up the real-time listener for business directory entries from Firestore.
+         * @param {string} appId The application ID.
+         * @param {string} userId The current user's ID.
+         */
+        function setupBusinessDirectoryListener(appId, userId) {
+            if (!db || !userId) {
+                console.warn("Firestore or User ID not available for business listener setup.");
+                return;
+            }
+
+            const businessesCollectionPath = `artifacts/${appId}/users/${userId}/businesses`;
+            const businessesRef = collection(db, businessesCollectionPath);
+
+            onSnapshot(businessesRef, (snapshot) => {
+                businessListDiv.innerHTML = ''; // Clear existing listings
+                directoryLoadingMessage.classList.add('hidden'); // Hide loading message
+
+                if (snapshot.empty) {
+                    businessListDiv.innerHTML = '<p class="text-center text-gray-500 mt-4">No businesses listed yet. Add one above!</p>';
+                    return;
+                }
+
+                const businesses = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    businesses.push({ id: doc.id, ...data, timestamp: data.timestamp || 0 });
+                });
+
+                // Sort businesses by timestamp (newest first)
+                businesses.sort((a, b) => b.timestamp - a.timestamp);
+
+                businesses.forEach(business => {
+                    const businessItem = document.createElement('div');
+                    businessItem.className = 'directory-item';
+                    businessItem.innerHTML = `
+                        <h3>${business.name}</h3>
+                        <p>Location: ${business.location}</p>
+                        <p>Phone: ${business.phone}</p>
+                        <div id="qr-${business.id}" class="qr-code-small"></div>
+                    `;
+                    businessListDiv.appendChild(businessItem);
+
+                    // Generate QR code for each listed business
+                    const qrCodeElement = document.getElementById(`qr-${business.id}`);
+                    const businessPageUrl = `https://ikegilbert.github.io/public/index.html?businessId=${business.id}`;
+                    generateQRCode(qrCodeElement, businessPageUrl, 80); // Smaller QR for directory list
+                });
+            }, (error) => {
+                console.error("Error fetching businesses:", error);
+                businessListDiv.innerHTML = '<p class="text-center text-red-500">Error loading business directory.</p>';
+                showMessage("Error fetching business directory.", 5000);
+            });
+        }
+
+        /**
+         * Handles the validation of client, business, and friend codes.
+         * This function will store the validation attempt in Firestore.
+         * @param {string} appId The application ID.
+         * @param {string} userId The current user's ID.
+         * @param {string} clientCode The client's unique reward code.
+         * @param {string} businessCode The unique business code.
+         * @param {string} friendCode The friend's referral code (optional).
+         */
+        async function validateCodes(appId, userId, clientCode, businessCode, friendCode) {
+            if (!db || !userId) {
+                showMessage("App not ready. Please wait for initialization.", 3000);
+                return;
+            }
+
+            if (!clientCode || !businessCode) {
+                validationMessageDisplay.textContent = "Client Code and Business Code are required!";
+                validationMessageDisplay.classList.remove('hidden');
+                return;
+            } else {
+                validationMessageDisplay.classList.add('hidden'); // Hide if previously shown
+            }
+
+            try {
+                const validationsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/codeValidations`);
+                await addDoc(validationsCollectionRef, {
+                    clientCode: clientCode.trim(),
+                    businessCode: businessCode.trim(),
+                    friendCode: friendCode.trim(), // Will be empty string if not provided
+                    timestamp: Date.now(),
+                    validatedBy: userId // Record who performed the validation
+                });
+                showMessage("Codes submitted for validation!", 3000);
+                validationMessageDisplay.textContent = "Codes submitted successfully! (Validation logic not implemented yet)";
+                validationMessageDisplay.classList.remove('hidden');
+                // Clear input fields
+                clientCodeInput.value = '';
+                businessCodeInput.value = '';
+                friendCodeInput.value = '';
+
+            } catch (error) {
+                console.error("Error submitting codes for validation: ", error);
+                showMessage("Error submitting codes. Please try again.", 5000);
+                validationMessageDisplay.textContent = "Error submitting codes. Please try again.";
+                validationMessageDisplay.classList.remove('hidden');
+            }
+        }
+
+
+        // --- Event Listeners ---
+        generateRewardBtn.addEventListener('click', async () => {
+            const name = customerNameInput.value.trim();
+            const phone = customerPhoneInput.value.trim();
+            const email = customerEmailInput.value.trim();
+
+            if (!name || !phone || !email) {
+                showMessage("Please fill in all customer details!", 3000);
+                return;
+            }
+
+            const rewardCode = generateAlphanumericCode(5);
+            rewardCodeDisplay.innerHTML = `
+                <p>Your 10% Off Code:</p>
+                <p class="text-2xl font-bold text-indigo-700">${rewardCode}</p>
+                <p>Enjoy your discount!</p>
+            `;
+            rewardCodeDisplay.classList.remove('hidden'); // Show the reward display
+
+            // Store the reward in Firestore
+            await addRewardEntry(
+                typeof __app_id !== 'undefined' ? __app_id : 'default-app-id',
+                currentUserId,
+                { name, phone, email, rewardCode }
+            );
+
+            // Clear input fields
+            customerNameInput.value = '';
+            customerPhoneInput.value = '';
+            customerEmailInput.value = '';
         });
+
+        addBusinessBtn.addEventListener('click', async () => {
+            const name = businessNameInput.value.trim();
+            const location = businessLocationInput.value.trim();
+            const phone = businessPhoneInput.value.trim();
+
+            await addBusinessEntry(
+                typeof __app_id !== 'undefined' ? __app_id : 'default-app-id',
+                currentUserId,
+                { name, location, phone }
+            );
+        });
+
+        validateCodesBtn.addEventListener('click', async () => {
+            const clientCode = clientCodeInput.value.trim();
+            const businessCode = businessCodeInput.value.trim();
+            const friendCode = friendCodeInput.value.trim(); // Optional, so no strict validation here
+
+            await validateCodes(
+                typeof __app_id !== 'undefined' ? __app_id : 'default-app-id',
+                currentUserId,
+                clientCode,
+                businessCode,
+                friendCode
+            );
+        });
+
+        // Initialize Firebase and set up listeners when the window loads
+        window.onload = () => {
+            initializeFirebase();
+        };
     </script>
 </body>
 </html>
+
