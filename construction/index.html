@@ -5,6 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Construction Gods - Premier Construction Services</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        #home {
+            background-image: url('https://source.unsplash.com/random/1600x900/?construction'), url('https://github.com/IkeGilbert/public/blob/main/construction/ConstructionGods%20logo.png?raw=true');
+            background-position: center, center;
+            background-repeat: no-repeat, no-repeat;
+            background-size: cover, contain;
+            background-blend-mode: overlay;
+            position: relative;
+        }
+        #home .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1); /* Reduced overlay opacity for more transparency */
+            z-index: 0;
+        }
+        #home .container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://github.com/IkeGilbert/public/blob/main/construction/ConstructionGods%20logo.png?raw=true');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 0.10; /* Reduced logo opacity for more transparency */
+            z-index: 1;
+        }
+        #home .container > * {
+            position: relative;
+            z-index: 2;
+        }
+    </style>
 </head>
 <body class="font-sans bg-gray-200">
     <!-- Header -->
@@ -40,11 +78,11 @@
     </header>
 
     <!-- Hero Section -->
-    <section id="home" class="bg-gray-100 h-[60vh] sm:h-screen flex items-center" style="background-image: url('https://source.unsplash.com/random/1600x900/?construction')">
+    <section id="home" class="bg-gray-100 h-[60vh] sm:h-screen flex items-center relative">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-gray-800">Professional Consultation Services</h2>
-            <p class="text-xs sm:text-sm md:text-base mb-6 text-gray-800">Guidance and resources for commercial / residential builders, general contractors, inspectors, home owners and investors</p>
-            <a href="#contact" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded text-sm sm:text-base">Request Information</a>
+            <p class="text-sm sm:text-base md:text-lg max-w-lg mx-auto mb-6 text-gray-800">Guidance and resources for commercial / residential builders, general contractors inspectors, home owners and investors</p>
+            <a href="#contact" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded text-sm sm:text-base mt-20">Request Information</a>
         </div>
     </section>
 
@@ -74,12 +112,15 @@
                 <div class="bg-white p-2 sm:p-3 rounded-lg shadow-md max-w-[60%] mx-auto">
                     <a href="https://ikegilbert.github.io/public/construction/gp_audit_tool.html" target="_blank" class="text-lg sm:text-xl font-semibold mb-2 text-center hover:text-blue-600">Gross Profit / Markup Calculator</a>
                 </div>
+                <div class="bg-white p-2 sm:p-3 rounded-lg shadow-md max-w-[60%] mx-auto">
+                    <a href="https://ikegilbert.github.io/public/construction/siding_takeoff.html" target="_blank" class="text-lg sm:text-xl font-semibold mb-2 text-center hover:text-blue-600">Siding Takeoff Calculator</a>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="bg-gray-100 py-8 sm:py-16" style="background-image: url('https://source.unsplash.com/random/1600x900/?construction')">
+    <section id="about" class="bg-gray-100 py-8 sm:py-16" style="background-image: url('https://source.unsplash.com/random/1600x900/?construction'); background-position: center; background-repeat: no-repeat; background-size: cover;">
         <div class="container mx-auto px-4">
             <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">About Us</h2>
             <p class="text-sm sm:text-lg text-left max-w-xl sm:max-w-2xl mx-auto">ConstructionGods.com is your trusted source for construction information and field tools. Owner Ike Gilbert has over 35 years of experience delivering top-tier multi-state projects. Our unique and proven skillsets include project planning, project and vendor management, scope of work definition, national pricing strategy for materials and labor, new home inspection, data audits, reporting and construction budgets. Learn how to leverage cutting edge technologies for your construction business needs.</p>
@@ -94,7 +135,7 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="bg-gray-100 py-8 sm:py-16" style="background-image: url('https://source.unsplash.com/random/1600x900/?construction')">
+    <section id="contact" class="bg-gray-100 py-8 sm:py-16" style="background-image: url('https://source.unsplash.com/random/1600x900/?construction'); background-position: center; background-repeat: no-repeat; background-size: cover;">
         <div class="container mx-auto px-4">
             <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Contact Us</h2>
             <div class="max-w-md sm:max-w-lg mx-auto flex justify-center items-center min-h-[600px]">
