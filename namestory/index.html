@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="NameStory">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#4a3f6b">
+  <meta name="description" content="Turn any name into a magical short story. A fun creative game that works offline on iPhone and Android.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%234a3f6b'/%3E%3Ctext y='.9em' font-size='70' x='50%25' text-anchor='middle' dominant-baseline='middle'%3E%F0%9F%93%96%3C/text%3E%3C/svg%3E">
+  <title>NameStory – Create a Story from Any Name</title>
+  <style>
+    :root {
+      --bg: #1a1528;
+      --surface: #2a2340;
+      --surface2: #352d4f;
+      --primary: #c9a0ff;
+      --primary-dark: #9b6dff;
+      --accent: #ffd166;
+      --text: #f5f0ff;
+      --text-muted: #b8a9d4;
+      --success: #7ddea0;
+      --radius: 16px;
+      --shadow: 0 8px 32px rgba(0,0,0,0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      overscroll-behavior: none;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100dvh;
+      background:
+        radial-gradient(ellipse at 20% 0%, rgba(155, 109, 255, 0.18) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 100%, rgba(255, 209, 102, 0.08) 0%, transparent 40%),
+        var(--bg);
+    }
+
+    .app {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      max-width: 520px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0 18px 24px;
+    }
+
+    header {
+      text-align: center;
+      padding: 28px 0 18px;
+    }
+
+    .logo {
+      font-size: 2.6rem;
+      line-height: 1;
+      margin-bottom: 6px;
+      filter: drop-shadow(0 4px 12px rgba(201, 160, 255, 0.4));
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .tagline {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 22px 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(201, 160, 255, 0.12);
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 16px 18px;
+      font-size: 1.15rem;
+      border: 2px solid var(--surface2);
+      border-radius: 12px;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(201, 160, 255, 0.2);
+    }
+
+    input[type="text"]::placeholder {
+      color: #6b5f8a;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    button {
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      padding: 15px 20px;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s, background 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .btn-primary {
+      flex: 1;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #1a1528;
+      box-shadow: 0 4px 16px rgba(155, 109, 255, 0.35);
+    }
+
+    .btn-secondary {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .btn-secondary:hover {
+      background: #3f365c;
+    }
+
+    #output {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    #output.visible {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .story-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .story-header h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .letter-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(201, 160, 255, 0.15);
+      color: var(--primary);
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+    }
+
+    .story-box {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 20px 18px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.05rem;
+      line-height: 1.65;
+      color: #efe8ff;
+      border: 1px solid rgba(201, 160, 255, 0.1);
+      max-height: 42vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .story-box p {
+      margin-bottom: 0.85em;
+    }
+
+    .story-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    .story-box .intro,
+    .story-box .outro {
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: 0.95rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .actions button {
+      flex: 1 1 auto;
+      min-width: 120px;
+      padding: 13px 14px;
+      font-size: 0.95rem;
+    }
+
+    .hint {
+      margin-top: 14px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .hint strong {
+      color: var(--primary);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px 0 8px;
+      font-size: 0.8rem;
+      color: #7a6e99;
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--success);
+      color: #0d2b1a;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Small screens tweaks */
+    @media (max-width: 380px) {
+      .app { padding: 0 14px 20px; }
+      h1 { font-size: 1.5rem; }
+      .story-box { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="logo">📖</div>
+      <h1>NameStory</h1>
+      <p class="tagline">Turn any name into a magical short story</p>
+    </header>
+
+    <main>
+      <div class="card">
+        <label for="nameInput">Enter a person's name</label>
+        <input
+          type="text"
+          id="nameInput"
+          placeholder="e.g. Ike, Maya, or Floyd"
+          maxlength="40"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+          enterkeyhint="go"
+        >
+        <div class="btn-row">
+          <button class="btn-primary" id="generateBtn">✨ Create Story</button>
+        </div>
+      </div>
+
+      <div class="card" id="output">
+        <div class="story-header">
+          <h2>Your Story</h2>
+          <span class="letter-badge" id="letterCount"></span>
+        </div>
+        <div class="story-box" id="storyText"></div>
+        <div class="actions">
+          <button class="btn-secondary" id="regenerateBtn">🔄 New Version</button>
+          <button class="btn-secondary" id="copyBtn">📋 Copy</button>
+          <button class="btn-secondary" id="shareBtn">📤 Share</button>
+        </div>
+        <p class="hint">
+          <strong>Game tip:</strong> The first letter of each story sentence spells the name in order. Share it and challenge friends to discover the name!
+        </p>
+      </div>
+    </main>
+
+    <footer>
+      Works offline • Add to Home Screen for the full app experience<br>
+      A tiny creative game for everyone
+    </footer>
+  </div>
+
+  <div class="toast" id="toast">Copied to clipboard!</div>
+
+  <script>
+    // ─────────────────────────────────────────────
+    // Data: sentence starters that begin with each letter
+    // and a shared pool of story endings
+    // ─────────────────────────────────────────────
+    const starters = {
+      A: [
+        "Amazingly, the heroes",
+        "All of a sudden, a glowing light",
+        "As the sun rose over the hills, they",
+        "An ancient map in their hands"
+      ],
+      B: [
+        "Boldly stepping onto the path, they",
+        "Before the others could speak, a shadow",
+        "By the light of the moon, the group",
+        "Behind the old stone wall, they"
+      ],
+      C: [
+        "Courageously they pressed forward and",
+        "Curiously examining the markings, they",
+        "Close to the edge of the cliff, they",
+        "Climbing higher into the mist, the party"
+      ],
+      D: [
+        "Deep in the whispering forest, they",
+        "Determined to solve the riddle, they",
+        "During the fiercest storm, the friends",
+        "Discovering a hidden doorway, they"
+      ],
+      E: [
+        "Eventually the path opened and they",
+        "Eagerly following the trail, they",
+        "Everywhere they looked, strange symbols",
+        "Escaping just in time, the travelers"
+      ],
+      F: [
+        "Finally reaching the clearing, they",
+        "Fearlessly crossing the bridge, they",
+        "Far beyond the last village, the group",
+        "Following the soft glowing footprints, they"
+      ],
+      G: [
+        "Gently the wind carried a whisper and they",
+        "Gathering their courage once more, they",
+        "Going deeper into the unknown, the heroes",
+        "Guarding the ancient secret, they"
+      ],
+      H: [
+        "Happily reunited with an old friend, they",
+        "Hidden among the tall trees, they",
+        "Hearing a distant melody, the group",
+        "Holding the mysterious key tightly, they"
+      ],
+      I: [
+        "In that very moment, everything",
+        "Immediately the ground trembled and they",
+        "Inside the crystal cave, the adventurers",
+        "Inspired by the northern lights, they"
+      ],
+      J: [
+        "Joyfully celebrating the small victory, they",
+        "Just as hope began to fade, a figure",
+        "Jumping across the rushing stream, they",
+        "Joining forces with a clever fox, they"
+      ],
+      K: [
+        "Knowing the danger that lay ahead, they",
+        "Keeping close to one another, the friends",
+        "Kneeling before the stone guardian, they",
+        "Kindly accepting the stranger's advice, they"
+      ],
+      L: [
+        "Later that same evening, the travelers",
+        "Looking up at the swirling stars, they",
+        "Laughing despite the odds, the group",
+        "Leading the way with a bright lantern, they"
+      ],
+      M: [
+        "Meanwhile, on the other side of the valley, they",
+        "Magically the door swung open and they",
+        "Moving with quiet determination, the party",
+        "Meeting a wise old owl who spoke, they"
+      ],
+      N: [
+        "Never once did they consider turning back as they",
+        "Near the sparkling riverbank, the heroes",
+        "Noticing a pattern in the stones, they",
+        "Navigating by the light of fireflies, they"
+      ],
+      O: [
+        "On the distant horizon a castle",
+        "Once they stepped through the archway, they",
+        "Opening the weathered wooden chest, they",
+        "Overcoming every obstacle in their path, they"
+      ],
+      P: [
+        "Proudly carrying the recovered artifact, they",
+        "Pushing through the thick undergrowth, they",
+        "Pausing only to catch their breath, the group",
+        "Protecting the village from the shadows, they"
+      ],
+      Q: [
+        "Quietly observing from the ridge, they",
+        "Quickly devising a clever plan, they",
+        "Questioning the old legend once more, they",
+        "Quenching their thirst at a pure spring, they"
+      ],
+      R: [
+        "Running toward the rising dawn, they",
+        "Reaching the highest peak at last, they",
+        "Remembering the words of the elder, they",
+        "Raising the lantern high above their heads, they"
+      ],
+      S: [
+        "Suddenly a flock of silver birds",
+        "Smiling with renewed hope, the friends",
+        "Searching every corner of the ruins, they",
+        "Standing together against the storm, they"
+      ],
+      T: [
+        "Then the clouds parted and they",
+        "Taking a deep breath of mountain air, they",
+        "Through the swirling mist the path",
+        "Trusting their instincts completely, they"
+      ],
+      U: [
+        "Under a sky full of unfamiliar stars, they",
+        "Unexpectedly a hidden staircase",
+        "Using every bit of their remaining strength, they",
+        "Understanding the final clue at last, they"
+      ],
+      V: [
+        "Very carefully they approached the altar and",
+        "Venturing deeper into the glowing cavern, they",
+        "Victoriously they held the prize aloft as they",
+        "Viewing the vast landscape below, the travelers"
+      ],
+      W: [
+        "With great courage in their hearts, they",
+        "Walking slowly across the glass-like lake, they",
+        "When the final challenge appeared, they",
+        "Wondering what wonders still awaited, they"
+      ],
+      X: [
+        "X marks the exact spot where they",
+        "Xenial spirits of the forest gently",
+        "Xylophone-like tones echoed as they",
+        "Xciting energy filled the air as they"
+      ],
+      Y: [
+        "Yesterday's fears now felt distant as they",
+        "Yearning for the next great discovery, they",
+        "Yelling with pure delight, the group",
+        "Yielding to the pull of destiny, they"
+      ],
+      Z: [
+        "Zealously pursuing the final truth, they",
+        "Zooming along the enchanted trail, they",
+        "Zipping between the ancient columns, they",
+        "Zestfully embracing the adventure, they"
+      ]
+    };
+
+    const endings = [
+      "discovered a glowing crystal that pulsed with soft light.",
+      "found an old friend waiting with important news.",
+      "uncovered a map drawn in silver ink.",
+      "heard a voice that seemed to come from the stones themselves.",
+      "watched as a bridge of light formed across the chasm.",
+      "realized the true meaning of the ancient prophecy.",
+      "were greeted by a creature made of living leaves.",
+      "felt the ground shift and reveal a secret stairway.",
+      "saw their own names written among the stars.",
+      "laughed as the danger turned into an unexpected gift.",
+      "solved the riddle that had puzzled generations.",
+      "made a promise that would shape the days ahead.",
+      "stood in awe of the beauty that surrounded them.",
+      "knew that this was only the beginning of something greater.",
+      "shared a quiet moment of perfect understanding."
+    ];
+
+    const closings = [
+      "And so the legend of {name} was written among the stars.",
+      "That is how the name {name} became a story worth telling.",
+      "In the end, the world remembered {name} for the courage shown that day.",
+      "And whenever the wind blows just right, people still speak of {name}.",
+      "Thus ends the short tale of {name} — for now."
+    ];
+
+    // ─────────────────────────────────────────────
+    // Core logic
+    // ─────────────────────────────────────────────
+    const nameInput = document.getElementById('nameInput');
+    const generateBtn = document.getElementById('generateBtn');
+    const regenerateBtn = document.getElementById('regenerateBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const shareBtn = document.getElementById('shareBtn');
+    const output = document.getElementById('output');
+    const storyText = document.getElementById('storyText');
+    const letterCount = document.getElementById('letterCount');
+    const toast = document.getElementById('toast');
+
+    let currentName = '';
+    let currentStoryPlain = '';
+
+    function getLetters(name) {
+      return name.toUpperCase().replace(/[^A-Z]/g, '').split('');
+    }
+
+    function pick(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function generateStory(name) {
+      const letters = getLetters(name);
+      if (letters.length === 0) return null;
+
+      const displayName = name.trim();
+      const sentences = [];
+
+      // Intro (does not count toward the acrostic)
+      sentences.push({
+        text: `In a realm of quiet magic, the story of ${displayName} began to unfold.`,
+        type: 'intro'
+      });
+
+      // One sentence per letter — first letter of each spells the name
+      for (const letter of letters) {
+        const options = starters[letter] || [`${letter}... the travelers`];
+        const starter = pick(options);
+        const ending = pick(endings);
+        sentences.push({
+          text: starter + ' ' + ending,
+          type: 'body'
+        });
+      }
+
+      // Closing
+      sentences.push({
+        text: pick(closings).replace(/\{name\}/g, displayName),
+        type: 'outro'
+      });
+
+      return { sentences, letters };
+    }
+
+    function renderStory(result) {
+      if (!result) return;
+
+      const { sentences, letters } = result;
+      storyText.innerHTML = '';
+
+      sentences.forEach(s => {
+        const p = document.createElement('p');
+        p.textContent = s.text;
+        if (s.type === 'intro' || s.type === 'outro') {
+          p.className = s.type;
+        }
+        storyText.appendChild(p);
+      });
+
+      letterCount.textContent = letters.length + (letters.length === 1 ? ' letter' : ' letters');
+      currentStoryPlain = sentences.map(s => s.text).join('\n\n');
+
+      output.classList.add('visible');
+      // smooth scroll into view on mobile
+      setTimeout(() => {
+        output.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
+    }
+
+    function create() {
+      const name = nameInput.value.trim();
+      if (!name) {
+        nameInput.focus();
+        nameInput.style.borderColor = '#ff6b6b';
+        setTimeout(() => { nameInput.style.borderColor = ''; }, 1200);
+        return;
+      }
+      currentName = name;
+      const result = generateStory(name);
+      renderStory(result);
+    }
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    // ─────────────────────────────────────────────
+    // Events
+    // ─────────────────────────────────────────────
+    generateBtn.addEventListener('click', create);
+
+    nameInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        create();
+      }
+    });
+
+    regenerateBtn.addEventListener('click', () => {
+      if (currentName) {
+        const result = generateStory(currentName);
+        renderStory(result);
+      }
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      if (!currentStoryPlain) return;
+      try {
+        await navigator.clipboard.writeText(currentStoryPlain);
+        showToast('Story copied!');
+      } catch (err) {
+        // fallback
+        const ta = document.createElement('textarea');
+        ta.value = currentStoryPlain;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('Story copied!');
+      }
+    });
+
+    shareBtn.addEventListener('click', async () => {
+      if (!currentStoryPlain) return;
+      const shareData = {
+        title: 'NameStory – A story for ' + currentName,
+        text: currentStoryPlain + '\n\n— Made with NameStory'
+      };
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+        } catch (err) {
+          // user cancelled or not supported fully
+        }
+      } else {
+        // fallback to copy
+        try {
+          await navigator.clipboard.writeText(currentStoryPlain);
+          showToast('Story copied (share not available)');
+        } catch (e) {
+          showToast('Unable to share');
+        }
+      }
+    });
+
+    // Focus input on load for quick start
+    window.addEventListener('load', () => {
+      setTimeout(() => nameInput.focus(), 300);
+    });
+
+    // Register service worker for offline / installable experience
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
