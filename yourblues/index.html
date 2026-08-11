@@ -412,7 +412,10 @@
     const titleThemes = [
       "Bubble Gum Blues",
       "Knee Deep Mud, Head First Dive Blues",
-      "Don't Pet The Goat Blues"
+      "Don't Pet The Goat Blues",
+      "Chickens Flew The Coop Blues",
+      "Purple Crayons Ain't For Eatin' Blues",
+      "Busted, Disgusted And Not To Be Trusted Blues"
     ];
 
     // General verses (not letter-tied) – short AAB blues stanzas
@@ -640,14 +643,27 @@
       return trimmed + "'s";
     }
 
-    function buildChorus(letters) {
+    function buildChorus(letters, songTitle) {
       // Pick one line per letter for this chorus instance
-      return letters.map(letter => {
+      const lines = letters.map(letter => {
         const options = chorusLines[letter] || [
           letter + " is for the blues that still won't let me be,"
         ];
         return pick(options);
-      }).join('\n');
+      });
+
+      // 4th line: witty closer that names the song
+      const titleClosers = [
+        "Singing " + songTitle + " again,",
+        "That's " + songTitle + " on repeat,",
+        "Call it " + songTitle + ", don't you know,",
+        "Living that " + songTitle + " life,",
+        "Another round of " + songTitle + ", here we go,",
+        "Still stuck in " + songTitle + ", what a show,"
+      ];
+      lines.push(pick(titleClosers));
+
+      return lines.join("\n");
     }
 
     function generateSong(name) {
@@ -664,10 +680,10 @@
       const verse2 = versePool[1];
       const verse3 = versePool[2];
 
-      // Build 3 slightly different choruses
-      const chorus1 = buildChorus(letters);
-      const chorus2 = buildChorus(letters);
-      const chorus3 = buildChorus(letters);
+      // Build 3 slightly different choruses (each ends with a line naming the song)
+      const chorus1 = buildChorus(letters, songTitle);
+      const chorus2 = buildChorus(letters, songTitle);
+      const chorus3 = buildChorus(letters, songTitle);
 
       const outro = pick(closings);
 
