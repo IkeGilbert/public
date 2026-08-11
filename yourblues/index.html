@@ -371,6 +371,13 @@
         <div class="btn-row">
           <button class="btn-primary" id="generateBtn">🎸 Write the Blues</button>
         </div>
+        <div style="margin-top:18px; text-align:center;">
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:8px;">Cadence / background track</p>
+          <audio id="bgTrack" controls preload="metadata" style="width:100%; max-width:320px; border-radius:8px;">
+            <source src="bubblegum-blues.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+        </div>
       </div>
 
       <div class="card" id="output">
@@ -414,7 +421,7 @@
       "Knee Deep Mud, Head First Dive Blues",
       "Don't Pet The Goat Blues",
       "Chickens Flew The Coop Blues",
-      "Purple Crayons Ain't For Eatin' Blues",
+      "Crayons Ain't For Eatin' Blues",
       "Busted, Disgusted And Not To Be Trusted Blues"
     ];
 
@@ -435,159 +442,133 @@
     // Designed so sequenced lines can form a coherent blues chorus
     const chorusLines = {
       A: [
-        "Ain't no use in crying when the deal goes wrong,",
-        "All my good intentions scattered on the lawn,",
-        "After every heartbreak I still sing this song,",
-        "Another day of trouble but I won't stay down long,"
+        "Ain't no use crying when the deal goes wrong,",
+        "All night long I been singing this song,",
+        "After the fall I still come on strong,"
       ],
       B: [
-        "Been down this road till the gravel turned to dust,",
-        "Broken promises and a pocket full of rust,",
-        "Baby said goodbye, left me nothing but distrust,",
-        "Blue skies coming if I just keep up the thrust,"
+        "Been down so long it feels like home,",
+        "Broken heart but I ain't alone,",
+        "Blue skies coming, just watch me roam,"
       ],
       C: [
-        "Can't get no rest till the creditors cease,",
-        "Cold wind blowing through the holes in my fleece,",
-        "Counting every blessing that still brings me peace,",
-        "Carry this old burden like it grants me release,"
+        "Can't get no rest till the trouble is gone,",
+        "Cold wind blowing but I carry on,",
+        "Counting my blessings from dusk until dawn,"
       ],
       D: [
-        "Don't need no fortune just to play this game,",
-        "Down at the bottom I still stake my claim,",
-        "Daylight finds me smiling just the same,",
-        "Dreams got delayed but they still know my name,"
+        "Don't need a fortune to play this game,",
+        "Down but not out, I still stake my claim,",
+        "Daylight finds me singing just the same,"
       ],
       E: [
         "Every morning starts the same old way,",
-        "Empty cup of coffee on a colder day,",
-        "Even when it rains I still know how to play,",
-        "End of the line but I dance anyway,"
+        "Empty pockets but I still know how to play,",
+        "Even the rain can't wash these blues away,"
       ],
       F: [
-        "Fell on hard times, barely made a sound,",
-        "Fool me once, I'll still stick around,",
-        "Friday night and the money's nowhere found,",
-        "Found my rhythm on this shaky ground,"
+        "Fell on hard times, got back up again,",
+        "Fool me once, I'll still jump in,",
+        "Found my rhythm in the thick of the spin,"
       ],
       G: [
         "Got a sticky shoe and a half-full heart,",
         "Gone are the easy days, that was just the start,",
-        "Good Lord knows I've played the hardest part,",
         "Grinning through the trouble is my favorite art,"
       ],
       H: [
         "Hard luck follows like a faithful hound,",
         "Heart got broken, sewed it up and bound,",
-        "Honey took the car, left me standing on the ground,",
-        "Holding on to hope is the best thing that I found,"
+        "Holding on to hope is the best thing I found,"
       ],
       I: [
-        "I woke up singing with these worn-out shoes,",
-        "If the blues is a river then I paid my dues,",
-        "It don't take much to knock a good man loose,",
-        "I'm still standing, that's my only excuse,"
+        "I've got some troubles baby, got them lowdown blues,",
+        "I'm heavy handed with these hard luck blues,",
+        "You know I'm trying baby, I'm trying not to lose,"
       ],
       J: [
         "Just when the bottom looked like the end,",
-        "Junkyard dreams and a message I would send,",
-        "Joked with the devil, almost lost a friend,",
+        "Junkyard dreams and a message I'd send,",
         "Jumping back up is the way I intend,"
       ],
       K: [
-        "Keep on walking though the road is long,",
+        "I keep on walking though the road is long,",
         "Kissed goodbye to the easy life I knew so long,",
-        "King of the corner with a cardboard throne and song,",
-        "Knowing every step is proof that I belong,"
+        "I'm still the king with nothing but a song,"
       ],
       L: [
         "Late last night I heard the whistle blow,",
         "Lost my money but I didn't lose the glow,",
-        "Lord have mercy on this weary soul below,",
         "Laughing at the trouble is the only way to go,"
       ],
       M: [
-        "My old luck ran out on a Monday morning train,",
+        "My old luck ran out on a Monday train,",
         "Mama told me not to sing but I sang it just the same,",
-        "Monday feels like Friday when you wear the pain,",
         "Making something pretty out of all this rain,"
       ],
       N: [
         "Never had a dollar that I didn't spend twice,",
         "Nobody knows the trouble that I still disguise,",
-        "Night falls heavy but I still rise,",
-        "Nothing left to lose so I roll the dice,"
+        "Night falls heavy but I still rise,"
       ],
       O: [
         "Oh the landlord's knocking with a heavy hand,",
         "Once I had a future, now I got a band,",
-        "Out of luck but still I make a stand,",
-        "One more chorus and I'll understand,"
+        "Out of luck but still I make a stand,"
       ],
       P: [
         "Paid my dues in every kind of way,",
         "Pocket full of nothing but I still can play,",
-        "Poor boy's got a rich man's dream to stay,",
         "Playing through the hardship every single day,"
       ],
       Q: [
         "Quiet as a mouse till the first chord hits,",
         "Questions keep on coming in the late-night fits,",
-        "Quit my job on a half-day whim of wits,",
         "Quick to find the rhythm when the darkness sits,"
       ],
       R: [
         "Rain keeps falling but I don't complain,",
         "Rode the rails till the rails rode me again,",
-        "Right when it looked like the end of the chain,",
         "Rising with the chorus is my only refrain,"
       ],
       S: [
         "Sticky gum shoe on a downtown street,",
         "Sold my guitar, bought it back with a beat,",
-        "Sunshine's scarce but the song still feels sweet,",
         "Singing through the shadows is how I compete,"
       ],
       T: [
         "Tried to leave this town a hundred times before,",
         "Trouble finds me like I put a sign on the door,",
-        "This old world keeps spinning, I just ask for more,",
         "Turning every setback into one more score,"
       ],
       U: [
         "Used to have a lover, used to have a plan,",
         "Under the bridge is where I learned to stand,",
-        "Up all night turning worry into sand,",
         "Until the morning light I still command,"
       ],
       V: [
         "Very little left but the clothes on my back,",
-        "Vices came calling, I just tipped my hat and stepped back,",
         "Victory tastes better when you've walked the hardest track,",
         "Voices in the night but I don't let them attack,"
       ],
       W: [
         "Woke up broke but I woke up free,",
         "When the deal goes bad I still sing in key,",
-        "Wish I had a dollar for the hard-luck spree,",
         "Walking with these blues is the life for me,"
       ],
       X: [
         "X marks the spot where my luck ran dry,",
         "Xtra special trouble always stops by,",
-        "X-ray vision couldn't tell me why,",
         "Xiting the darkness with my head held high,"
       ],
       Y: [
         "You can take my money, take my foolish pride,",
         "Yesterday's gone on a one-way ride,",
-        "Yes I been low but I never fully died,",
         "Yelling out the chorus is how I survive,"
       ],
       Z: [
         "Zero in the bank and a hole in my sole,",
         "Zipper on my jacket but I'm still in control,",
-        "Zone of hard luck is where the best stories roll,",
         "Zipping through the verses with a fire in my soul,"
       ]
     };
@@ -654,12 +635,12 @@
 
       // 4th line: witty closer that names the song
       const titleClosers = [
-        "Singing " + songTitle + " again,",
-        "That's " + songTitle + " on repeat,",
-        "Call it " + songTitle + ", don't you know,",
-        "Living that " + songTitle + " life,",
-        "Another round of " + songTitle + ", here we go,",
-        "Still stuck in " + songTitle + ", what a show,"
+        "Yeah I refuse to chew on... " + songTitle + "...",
+        "But I still got to sing these... " + songTitle + "...",
+        "You know I can't escape these... " + songTitle + "...",
+        "Still stuck chewing on... " + songTitle + "...",
+        "Lord have mercy on these... " + songTitle + "...",
+        "I keep on fighting these... " + songTitle + "..."
       ];
       lines.push(pick(titleClosers));
 

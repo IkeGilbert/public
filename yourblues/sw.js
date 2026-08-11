@@ -1,8 +1,9 @@
-const CACHE_NAME = 'namestory-v1';
+const CACHE_NAME = 'namestory-v2';
 const ASSETS = [
   './',
   './index.html',
-  './manifest.json'
+  './manifest.json',
+  './bubblegum-blues.mp3'
 ];
 
 self.addEventListener('install', (event) => {
