@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="NameStory">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#1a0f0a">
+  <meta name="description" content="Turn any name into a blues song. Each letter starts a verse. Humor, dark comedy, upbeat ending. Offline web app.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231a0f0a'/%3E%3Ctext y='.9em' font-size='60' x='50%25' text-anchor='middle' dominant-baseline='middle'%3E%F0%9F%8E%B8%3C/text%3E%3C/svg%3E">
+  <title>NameStory – Bubble Gum Blues</title>
+  <style>
+    :root {
+      --bg: #120c09;
+      --surface: #1f1612;
+      --surface2: #2c211c;
+      --primary: #e8a87c;
+      --primary-dark: #c9845a;
+      --accent: #f0c75e;
+      --text: #f5e6d3;
+      --text-muted: #a89080;
+      --success: #7ddea0;
+      --radius: 16px;
+      --shadow: 0 8px 32px rgba(0,0,0,0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      overscroll-behavior: none;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100dvh;
+      background:
+        radial-gradient(ellipse at 20% 0%, rgba(232, 168, 124, 0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 100%, rgba(240, 199, 94, 0.07) 0%, transparent 40%),
+        var(--bg);
+    }
+
+    .app {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      max-width: 520px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0 18px 24px;
+    }
+
+    header {
+      text-align: center;
+      padding: 28px 0 18px;
+    }
+
+    .logo {
+      font-size: 2.6rem;
+      line-height: 1;
+      margin-bottom: 6px;
+      filter: drop-shadow(0 4px 12px rgba(232, 168, 124, 0.4));
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .tagline {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 22px 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(232, 168, 124, 0.15);
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 16px 18px;
+      font-size: 1.15rem;
+      border: 2px solid var(--surface2);
+      border-radius: 12px;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(232, 168, 124, 0.2);
+    }
+
+    input[type="text"]::placeholder {
+      color: #6b5648;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    button {
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      padding: 15px 20px;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s, background 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .btn-primary {
+      flex: 1;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #1a0f0a;
+      box-shadow: 0 4px 16px rgba(201, 132, 90, 0.35);
+    }
+
+    .btn-secondary {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .btn-secondary:hover {
+      background: #3a2d26;
+    }
+
+    #output {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    #output.visible {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .story-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .story-header h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.3;
+    }
+
+    .letter-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(232, 168, 124, 0.15);
+      color: var(--primary);
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+    }
+
+    .story-box {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 20px 18px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: #f0e4d4;
+      border: 1px solid rgba(232, 168, 124, 0.12);
+      max-height: 48vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .story-box .song-title {
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--accent);
+      margin-bottom: 1.1em;
+      text-align: center;
+      font-style: italic;
+    }
+
+    .story-box p {
+      margin-bottom: 1.1em;
+      white-space: pre-line;
+    }
+
+    .story-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    .story-box .outro {
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: 0.95rem;
+      margin-top: 0.5em;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .actions button {
+      flex: 1 1 auto;
+      min-width: 120px;
+      padding: 13px 14px;
+      font-size: 0.95rem;
+    }
+
+    .hint {
+      margin-top: 14px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .hint strong {
+      color: var(--primary);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px 0 8px;
+      font-size: 0.8rem;
+      color: #7a6a5c;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--success);
+      color: #0d2b1a;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 380px) {
+      .app { padding: 0 14px 20px; }
+      h1 { font-size: 1.5rem; }
+      .story-box { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="logo">🎸</div>
+      <h1>NameStory</h1>
+      <p class="tagline">Turn any name into a blues song — one verse per letter</p>
+    </header>
+
+    <main>
+      <div class="card">
+        <label for="nameInput">Enter a person's name</label>
+        <input
+          type="text"
+          id="nameInput"
+          placeholder="e.g. Ike, Maya, or Floyd"
+          maxlength="40"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+          enterkeyhint="go"
+        >
+        <div class="btn-row">
+          <button class="btn-primary" id="generateBtn">🎸 Write the Blues</button>
+        </div>
+      </div>
+
+      <div class="card" id="output">
+        <div class="story-header">
+          <h2 id="songTitleDisplay">Your Song</h2>
+          <span class="letter-badge" id="letterCount"></span>
+        </div>
+        <div class="story-box" id="storyText"></div>
+        <div class="actions">
+          <button class="btn-secondary" id="regenerateBtn">🔄 New Version</button>
+          <button class="btn-secondary" id="copyBtn">📋 Copy</button>
+          <button class="btn-secondary" id="shareBtn">📤 Share</button>
+        </div>
+        <p class="hint">
+          <strong>How it works:</strong> Each letter of the name starts a blues verse.<br>
+          Song title is always <em>[Name]'s Bubble Gum Blues</em>.<br>
+          Dark humor, rhymes, and an upbeat finish. Hit New Version for fresh lyrics.
+        </p>
+      </div>
+    </main>
+
+    <footer>
+      Works offline • Add to Home Screen for the full app experience<br>
+      Blues edition • Humor • Dark comedy • Upbeat ending
+    </footer>
+  </div>
+
+  <div class="toast" id="toast">Copied to clipboard!</div>
+
+  <script>
+    // Blues song generator
+    // Each letter of the name starts a verse
+    // Title: "[Name]'s Bubble Gum Blues"
+    // Tone: humor + dark comedy + upbeat ending
+    // Multiple variants per letter for personalization
+
+    const verses = {
+      A: [
+        "Ain't no sunshine when the rent comes due,\nAin't no sunshine and my luck's run through,\nBut I still got two left feet and a half-full shoe.",
+        "All night long I chased that no-good deal,\nAll night long it slipped right past my heel,\nNow I'm laughing 'cause the joke was on the steel.",
+        "After midnight the streetlights start to hum,\nAfter midnight I count what I ain't become,\nStill I tip my hat and say 'well, here I come.'"
+      ],
+      B: [
+        "Been down so long it looks like up to me,\nBeen down so long I forgot how to plea,\nBut I found a nickel and I bought the next degree.",
+        "Baby left me with the dog and the bills,\nBaby left me with a note full of thrills,\nNow the dog and me are working on our skills.",
+        "Broken heart, broken car, broken phone,\nBroken everything but the will to carry on,\nI just tuned this old guitar and wrote a song."
+      ],
+      C: [
+        "Can't get no rest and I can't get no peace,\nCan't get no rest till the creditors cease,\nStill I dance in the kitchen like I just got a lease.",
+        "Cold wind blowing through the holes in my coat,\nCold wind blowing, got a lump in my throat,\nBut I whistle anyway and I stay afloat.",
+        "Coffee's gone cold and the toast is pure charcoal,\nCoffee's gone cold like the state of my soul,\nYet I raise my cup and toast the whole damn role."
+      ],
+      D: [
+        "Don't need no fortune, don't need no fame,\nDon't need no fortune just to play this game,\nI got a sticky shoe and I'm still staking my claim.",
+        "Down at the crossroads I made a bad trade,\nDown at the crossroads my future got delayed,\nBut I walked away grinning with the price I paid.",
+        "Daylight finds me still sweeping the floor,\nDaylight finds me with my back to the door,\nI just smile and say 'I've been here before.'"
+      ],
+      E: [
+        "Every morning starts the same old way,\nEvery morning with the same old pay,\nBut I still tip the waitress and I still say hey.",
+        "Empty pockets and a head full of schemes,\nEmpty pockets but I'm rich in dreams,\nI just keep walking till the next good scene.",
+        "Even the rain can't wash this smile away,\nEven the rain on a cold hard day,\nI got the blues but I dance anyway."
+      ],
+      F: [
+        "Fell on hard times, fell on harder ground,\nFell on hard times, barely made a sound,\nThen I got up and turned the whole thing around.",
+        "Friday night and the money's long gone,\nFriday night but the music plays on,\nI got nothing left so I give them a song.",
+        "Fool me once, shame on the town,\nFool me twice, I'll still stick around,\n'Cause this sticky shoe don't know how to stay down."
+      ],
+      G: [
+        "Got a hole in my shoe and a hole in my plan,\nGot a hole in my shoe but I'm still my own man,\nI just keep stepping like I know who I am.",
+        "Gone are the days when the living was easy,\nGone are the days, now the living is greasy,\nStill I fry up hope and I call it tasty.",
+        "Good Lord knows I have tried and I failed,\nGood Lord knows how many times I have wailed,\nBut tonight I laugh and the blues get nailed."
+      ],
+      H: [
+        "Hard times knocking like they own the place,\nHard times knocking with a familiar face,\nI just open the door and give them some space.",
+        "Heart got broken, sewed it up with twine,\nHeart got broken but it's still beating fine,\nI wear it loud like a neon sign.",
+        "Honey took the car and the last of the cash,\nHoney took the car in a cloud of ash,\nI just waved and said 'go on, make a splash.'"
+      ],
+      I: [
+        "I woke up this morning with my shoes stuck tight,\nI woke up this morning to a brand new fight,\nBut I pulled 'em free and I stepped into the light.",
+        "If the blues is a river then I'm learning to swim,\nIf the blues is a river I dive right in,\nCome up laughing with a brand new grin.",
+        "It don't take much to knock a good man down,\nIt don't take much to turn a smile to a frown,\nBut it takes less to get back up and own the town."
+      ],
+      J: [
+        "Just when I thought that the worst was done,\nJust when I thought I had nowhere to run,\nThe sun came up and the day begun.",
+        "Junkyard dreams and a second-hand suit,\nJunkyard dreams but the rhythm's still cute,\nI strut like a king in these worn-out boots.",
+        "Joked with the devil and I almost lost,\nJoked with the devil, nearly paid the cost,\nNow I tell the story and I laugh the most."
+      ],
+      K: [
+        "Keep on walking though the road is long,\nKeep on walking, singing this old song,\nEvery step I take is proof that I belong.",
+        "Kissed goodbye to the easy life,\nKissed goodbye with a butter knife,\nNow I cook up trouble and I call it spice.",
+        "King of the corner with a cardboard throne,\nKing of the corner, still I hold my own,\nOne day this sticky shoe will take me home."
+      ],
+      L: [
+        "Late last night I heard the whistle blow,\nLate last night with nowhere left to go,\nSo I wrote this verse and I let it show.",
+        "Lost my money, lost my mind a spell,\nLost my money but I didn't lose myself,\nI just tuned the strings and rang the bell.",
+        "Lord have mercy on this weary soul,\nLord have mercy, make these broken parts whole,\nTill then I'll keep playing and collecting the toll."
+      ],
+      M: [
+        "My old lady said I'm nothing but trouble,\nMy old lady said that bubble would burst double,\nI just smiled and popped another bubble.",
+        "Mama told me not to sing the blues,\nMama told me I'd have nothing left to lose,\nSo I sang 'em louder just to prove her views.",
+        "Monday morning feels like Friday night gone wrong,\nMonday morning but I still got a song,\nI wear these blues like they make me strong."
+      ],
+      N: [
+        "Never had a dollar that I didn't spend twice,\nNever had a dollar that would ever suffice,\nStill I tip my hat and roll the dice.",
+        "Nobody knows the trouble I invent,\nNobody knows how much of it is spent,\nBut the crowd keeps laughing so I don't repent.",
+        "Night falls heavy on a hard-luck town,\nNight falls heavy but I don't stay down,\nI light a match and I turn it around."
+      ],
+      O: [
+        "Oh the landlord's knocking with a heavy hand,\nOh the landlord's knocking but I got a band,\nWe play so loud he forgets the demand.",
+        "Once I had a future bright and clean,\nOnce I had a future, now I got a scene,\nAnd this sticky shoe is still in the routine.",
+        "Out of luck and nearly out of time,\nOut of luck but still I make it rhyme,\nOne more chorus and I'm feeling fine."
+      ],
+      P: [
+        "Paid my dues in every kind of way,\nPaid my dues and I still have to pay,\nBut the blues I sing keep the dark at bay.",
+        "Pocket full of nothing and a head full of noise,\nPocket full of nothing but I still got choice,\nI choose to sing with a rusty voice.",
+        "Poor boy's got a rich man's dream,\nPoor boy's got a scheme within a scheme,\nWatch him turn the hardship into steam."
+      ],
+      Q: [
+        "Quiet as a mouse till the first chord hits,\nQuiet as a mouse then the whole room sits,\nI open my mouth and the silence splits.",
+        "Questions keep coming that I can't answer right,\nQuestions keep coming in the dead of night,\nI just sing the question till it feels all right.",
+        "Quit my job on a half-day whim,\nQuit my job, now the future looks dim,\nBut the stage is bright and I dive right in."
+      ],
+      R: [
+        "Rain keeps falling on this old tin roof,\nRain keeps falling, that's the honest truth,\nI just play along like I need no proof.",
+        "Rode the rails till the rails rode me,\nRode the rails from sea to shining sea,\nNow I write it down so the tale stays free.",
+        "Right when the bottom looked like the end,\nRight when the bottom was my only friend,\nI found a rhythm and I started to mend."
+      ],
+      S: [
+        "Sticky gum shoe on a downtown street,\nSticky gum shoe with a wandering beat,\nEvery step I take is a small defeat... that still feels sweet.",
+        "Sold my guitar, bought it back next day,\nSold my guitar just to throw the blues away,\nThey came right back so I let them stay.",
+        "Sunshine's scarce and the shadows grow long,\nSunshine's scarce but I still got a song,\nI sing it loud and the dark moves along."
+      ],
+      T: [
+        "Tried to leave this town a hundred times,\nTried to leave it with my pockets full of dimes,\nEnded up right back here making better rhymes.",
+        "Trouble finds me like I put out a sign,\nTrouble finds me and I treat it fine,\nWe sit and talk and share a little wine.",
+        "This old world keeps spinning out of line,\nThis old world but I claim it as mine,\nI plant my sticky shoe and I draw the line."
+      ],
+      U: [
+        "Used to have a lover, used to have a plan,\nUsed to have a future in the palm of my hand,\nNow I got the blues and I still take a stand.",
+        "Under the bridge where the cold wind cries,\nUnder the bridge I learned how to rise,\nI dried my eyes and I claimed the prize.",
+        "Up all night with the weight of the day,\nUp all night turning worry to play,\nBy dawn I had a brand new thing to say."
+      ],
+      V: [
+        "Very little left but the clothes on my back,\nVery little left on this long hard track,\nStill I walk it proud and I don't look back.",
+        "Vices came calling with a friendly grin,\nVices came calling, almost reeled me in,\nI tipped my hat and I walked out thin.",
+        "Victory tastes better when you almost lost,\nVictory tastes better when you paid the cost,\nI raise this glass to the bridges I crossed."
+      ],
+      W: [
+        "Woke up broke but I woke up free,\nWoke up broke with a new melody,\nThat's a fair trade if you ask me.",
+        "When the deal goes bad and the night goes long,\nWhen the deal goes bad I still sing my song,\nThe sticky gum shoe keeps me moving along.",
+        "Wish I had a dollar for every hard luck tale,\nWish I had a dollar, I'd still end up frail,\nBut I'd buy this room another round of ale."
+      ],
+      X: [
+        "X marks the spot where my luck ran dry,\nX marks the spot under a hard luck sky,\nI dug right there and I found a reason why.",
+        "Xtra special trouble found me again,\nXtra special trouble like an old friend,\nWe dance a while then I walk in the end.",
+        "X-ray vision couldn't save this heart,\nX-ray vision saw the whole thing fall apart,\nStill I play the break like a work of art."
+      ],
+      Y: [
+        "You can take my money, take my pride,\nYou can take my money, leave me hollow inside,\nBut you can't take the song that I keep alive.",
+        "Yesterday's gone and it ain't coming back,\nYesterday's gone down a one-way track,\nToday I got the blues and a brand new attack.",
+        "Yes I been low and yes I been high,\nYes I been low enough to almost say goodbye,\nThen the chorus hit and I learned how to fly."
+      ],
+      Z: [
+        "Zero in the bank and a hole in my sole,\nZero in the bank but I'm still in control,\nI stamp this sticky shoe and I rock and I roll.",
+        "Zipper on my jacket broken half the way,\nZipper on my jacket on a windy day,\nI just hold it closed and I face the fray.",
+        "Zone of hard luck, I know it well,\nZone of hard luck is where the best stories dwell,\nI write 'em down and I ring the bell."
+      ]
+    };
+
+    const closings = [
+      "So if you see me coming with that sticky gum shoe,\nJust know I paid the dues and I made it through—\nThis blues ends happy, and I'm pointing at you.",
+      "Now the night is over and the sun's climbing high,\nI still got the blues but I also got sky—\nSticky gum shoe and a reason to try.",
+      "Last call for sorrow, last call for the ache,\nI drank it all down for old time's sake—\nThen I stood up laughing for the next verse I make.",
+      "They said the blues would bury me deep,\nThey said the blues was a promise I'd keep—\nI kept the rhythm instead and I woke from the sleep.",
+      "Final note rising on a beat-up old string,\nFinal note rising like a brand new spring—\nBubble Gum Blues... and the whole room sings."
+    ];
+
+    const nameInput = document.getElementById('nameInput');
+    const generateBtn = document.getElementById('generateBtn');
+    const regenerateBtn = document.getElementById('regenerateBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const shareBtn = document.getElementById('shareBtn');
+    const output = document.getElementById('output');
+    const storyText = document.getElementById('storyText');
+    const letterCount = document.getElementById('letterCount');
+    const songTitleDisplay = document.getElementById('songTitleDisplay');
+    const toast = document.getElementById('toast');
+
+    let currentName = '';
+    let currentStoryPlain = '';
+
+    function getLetters(name) {
+      return name.toUpperCase().replace(/[^A-Z]/g, '').split('');
+    }
+
+    function pick(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function makePossessive(name) {
+      const trimmed = name.trim();
+      if (!trimmed) return trimmed;
+      if (trimmed.toLowerCase().endsWith('s')) {
+        return trimmed + "'";
+      }
+      return trimmed + "'s";
+    }
+
+    function generateSong(name) {
+      const letters = getLetters(name);
+      if (letters.length === 0) return null;
+
+      const displayName = name.trim();
+      const songTitle = makePossessive(displayName) + " Bubble Gum Blues";
+      const parts = [];
+
+      parts.push({ text: songTitle, type: 'title' });
+
+      for (const letter of letters) {
+        const options = verses[letter] || [
+          letter + " is for the blues that found me today,\n" + letter + " is for the price I still got to pay,\nBut I sing it loud and I find my way."
+        ];
+        parts.push({ text: pick(options), type: 'verse' });
+      }
+
+      parts.push({ text: pick(closings), type: 'outro' });
+
+      return { parts, letters, songTitle };
+    }
+
+    function renderSong(result) {
+      if (!result) return;
+
+      const { parts, letters, songTitle } = result;
+      storyText.innerHTML = '';
+      songTitleDisplay.textContent = songTitle;
+
+      parts.forEach(p => {
+        if (p.type === 'title') {
+          const div = document.createElement('div');
+          div.className = 'song-title';
+          div.textContent = p.text;
+          storyText.appendChild(div);
+        } else {
+          const para = document.createElement('p');
+          para.textContent = p.text;
+          if (p.type === 'outro') para.className = 'outro';
+          storyText.appendChild(para);
+        }
+      });
+
+      letterCount.textContent = letters.length + (letters.length === 1 ? ' verse' : ' verses');
+      currentStoryPlain = parts.map(p => p.text).join('\n\n');
+
+      output.classList.add('visible');
+      setTimeout(() => {
+        output.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
+    }
+
+    function create() {
+      const name = nameInput.value.trim();
+      if (!name) {
+        nameInput.focus();
+        nameInput.style.borderColor = '#ff6b6b';
+        setTimeout(() => { nameInput.style.borderColor = ''; }, 1200);
+        return;
+      }
+      currentName = name;
+      const result = generateSong(name);
+      renderSong(result);
+    }
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    generateBtn.addEventListener('click', create);
+
+    nameInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        create();
+      }
+    });
+
+    regenerateBtn.addEventListener('click', () => {
+      if (currentName) {
+        const result = generateSong(currentName);
+        renderSong(result);
+      }
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      if (!currentStoryPlain) return;
+      try {
+        await navigator.clipboard.writeText(currentStoryPlain);
+        showToast('Song copied!');
+      } catch (err) {
+        const ta = document.createElement('textarea');
+        ta.value = currentStoryPlain;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('Song copied!');
+      }
+    });
+
+    shareBtn.addEventListener('click', async () => {
+      if (!currentStoryPlain) return;
+      const shareData = {
+        title: makePossessive(currentName) + " Bubble Gum Blues",
+        text: currentStoryPlain + '\n\n— Made with NameStory'
+      };
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+        } catch (err) {}
+      } else {
+        try {
+          await navigator.clipboard.writeText(currentStoryPlain);
+          showToast('Song copied (share not available)');
+        } catch (e) {
+          showToast('Unable to share');
+        }
+      }
+    });
+
+    window.addEventListener('load', () => {
+      setTimeout(() => nameInput.focus(), 300);
+    });
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
